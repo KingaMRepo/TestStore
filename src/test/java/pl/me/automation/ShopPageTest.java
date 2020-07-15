@@ -5,67 +5,146 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
-import pl.me.automation.page.HomePage;
-import pl.me.automation.page.ShopPage;
+import pl.me.automation.page.*;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ShopPageTest {
     private WebDriver webDriver;
     private HomePage homePage;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         webDriver = WebDriverType.CHROME.create();
         webDriver.get("https://www.storetestproject.hekko24.pl/");
         homePage = new HomePage(webDriver);
         homePage.clickCookie();
     }
+
     @AfterEach
-    public void destroy(){
-       // webDriver.close();
+    public void destroy() {
+        //webDriver.close();
     }
+//Sorting products
     @Test
-    public void ShouldFindProduct(){
+    public void shouldFindProductByWritingCorrectPhrase() {
         ShopPage shopPage = homePage.clickShop();
-        //shopPage.findProduct("jeans");
-        //shopPage.filterProductsByPrice();
-        //shopPage.filterProductsBySize("XL");
-        //shopPage.filterProductsBySize("30");
-        //shopPage.filterProductsByColour("Gray");
-        //shopPage.sortProducts("Sortuj od najnowszych");
-       // shopPage.displayProductPhoto();
-        //shopPage.activeFiltersDeleteByIndex(1);
-        //shopPage.activeFiltersDeleteByName("30");
-        //shopPage.clickAddToBasketButton(1);
-        List<String> filterLabels = shopPage.getFilterLabels();
-        assertThat(filterLabels).containsExactly("30", "Gray");
+        SearchResultsPage searchResult = shopPage.findProduct("jeans");
+        assertThat(searchResult.isSearchResultsPageDisplayedShowingProduct()).isTrue();
+    }
 
+    @Test
+    public void shouldFindProductByWritingIncorrectPhrase() {
+        ShopPage shopPage = homePage.clickShop();
+        SearchResultsPage searchResult = shopPage.findProduct("aaajeanns");
+        assertThat(searchResult.isSearchResultsPageDisplayedShowingAlert()).isTrue();
+    }
 
+    @Test
+    public void shouldSortProductByItsRate() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.sortProducts("Sortuj wg średniej oceny");
+    }
 
-
+    @Test
+    public void shouldSortProductByItsPrice() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.sortProducts("Sortuj wg ceny: od najwyższej");
     }
 
 
+    @Test
+    public void shouldGoFromSearchResultsToProductCardClickingOnProductSlidePhotoAndClose() {
+        ShopPage shopPage = homePage.clickShop();
+        SearchResultsPage searchResult = shopPage.findProduct("Aqua Wind Breaker");
+        SingleProductPage photoZoom = searchResult.displayProductPhoto();
+        photoZoom.ZoomProductPhoto();
+        assertTrue(photoZoom.isZoomImageDisplayed());
+    }
+
+    @Test
+    public void shouldDeleteChosenFilters() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.filterProductsBySize("XL");
+        shopPage.filterProductsBySize("30");
+        shopPage.filterProductsByColour("Gray");
+        shopPage.activeFiltersDeleteByName("30");
+        List<String> filterLabels = shopPage.getFilterLabels();
+        assertThat(filterLabels).containsExactly("Gray","XL");
+    }
 
 
+    //shopPage.activeFiltersDeleteByIndex(1);
+    //shopPage.activeFiltersDeleteByName("30");
+    //homePage.deletingProductsFromWidget();
+    //shopPage.addToShoppingCardOneProductsMultiplyTimes();
+    //shopPage.addToShoppingCardManyProductsMultiplyTimes();
+    //assertThat(shoppingCardPage.getProductName()).containsExactly("Black Jacket", "Basic Blue Jeans");
+    //shoppingCardPage.removeProductsByName("Black Jacket");
+    //assertTrue(shoppingCardPage.isDisplayEmptyBasket());
+    //shopPage.addProductsToWishList(0);
 
+    @Test
+    public void shouldCheckIfPendingShoppingCardSumsUpWithNewAdded() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket("Black Jacket");
+        shopPage.addProductsToBasket("Basic Blue Jeans");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        Double totalPrice = shoppingCardPage.getShoppingCardTotalPrice();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        paymentPage.enterBillingUserName("marek");
+        paymentPage.enterBillingUserLastName("nowak");
+        paymentPage.selectBillingCountry(1);
+        paymentPage.enterBillingUserAddress("Kwiatowa");
+        paymentPage.enterBillingUserCity("Poznań");
+        paymentPage.enterBillingUserPostCode("60001");
+        paymentPage.enterBillingUserPhone("600500400");
+        paymentPage.enterBillingUserEmail("qwertt!#12@nazwa.pl");
+        paymentPage.enterBillingAccountUsername("kinga");
+        paymentPage.enterBillingAccountPassword("&%SIytrdf!90");
+        paymentPage.deselectShipToDifferentAddressCheckbox();
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        shopPage = paymentPage.clickShop();
+        shopPage.addProductsToBasket("Black Jacket");
+        Double productPrice = shopPage.getProductPrice("Black Jacket");
+        shoppingCardPage = shopPage.clickBasket();
+        assertThat(totalPrice + productPrice).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice());
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    @Test
+    public void shouldAddProductFromItsCardAndAddProductFromRelatedProductsSection() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.clickToShowSingleProductCard(1);
+        //singleProductPage.getSingleProductNameText();
+        //singleProductPage.clickAddToCardSingeProductButton();
+        //singleProductPage.getRecommendProductNameText();
+        //singleProductPage.clickRecommendProductButton();
+        //singleProductPage.clickShoppingCard();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

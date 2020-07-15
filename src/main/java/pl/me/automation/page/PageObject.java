@@ -12,7 +12,7 @@ public abstract class PageObject {
     public PageObject(WebDriver driver) {
         this.webDriver = driver;
         PageFactory.initElements(driver, this);
-        wait = new WebDriverWait(driver, 100, 8000);
+        wait = new WebDriverWait(driver, 25, 1000);
     }
 
 }

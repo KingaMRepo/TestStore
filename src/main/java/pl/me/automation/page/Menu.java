@@ -4,10 +4,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 public class Menu extends PageObject {
+    @FindBy(id = "menu-item-381")
+    private  WebElement homeButton;
     @FindBy(id = "menu-item-829")
     private WebElement contactButton;
     @FindBy(id = "menu-item-45")
@@ -24,6 +27,17 @@ public class Menu extends PageObject {
     private WebElement shoppingCardButton;
     @FindBy (className = "site-logo-img")
     private WebElement logoButton;
+    @FindBy(className = "ast-site-header-cart-li")
+    private WebElement widgetButton;
+    @FindBy(css ="a[class*='remove_from_cart_button']")
+    private List<WebElement>widgetProduct;
+    @FindBy(css="div[class='ast-site-header-cart-data'] >div > div>ul > li > a:nth-child(2) ")
+    private List<WebElement>widgetProductNames;
+    @FindBy(css ="div[class*='widget_shopping_cart']")
+    private WebElement widgetCard;
+    @FindBy(tagName = "h1")
+    public WebElement h1Header;
+
 
 
     public Menu(WebDriver driver) {
@@ -54,14 +68,26 @@ public class Menu extends PageObject {
         return new ShopPage(webDriver);
     }
 
+    public HomePage clickHome(){
+        homeButton.click();
+        return new HomePage(webDriver);
+    }
+
     public MyAccountPage clickMyAccount() {
         myAccountButton.click();
         return new MyAccountPage(webDriver);
     }
 
-    public WistListPage clickWistListPage() {
+    public MyAccountPage clickMyAccountWaitForOrder() {
+        wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Zamówienie"));
+        myAccountButton.click();
+        return new MyAccountPage(webDriver);
+    }
+
+
+    public WishListPage clickWistListPage() {
         wishListButton.click();
-        return new WistListPage(webDriver);
+        return new WishListPage(webDriver);
 
     }
 
@@ -70,9 +96,9 @@ public class Menu extends PageObject {
         return new AboutPage(webDriver);
     }
 
-    public ShoppingCard clickShoppingCard() {
+    public ShoppingCardPage clickShoppingCard() {
         shoppingCardButton.click();
-        return new ShoppingCard(webDriver);
+        return new ShoppingCardPage(webDriver);
     }
 
     public HomePage clickLogo(){
@@ -80,4 +106,23 @@ public class Menu extends PageObject {
         return new HomePage(webDriver);
     }
 
+    public void showProductsFromWidget() {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(widgetButton).build().perform();
+    }
+    public ShopPage deleteProductFromWidgetByName(String name){
+        for (int i = 0; i <widgetProductNames.size(); i++) {
+            if(widgetProductNames.get(i).getText().equals(name)){
+                wait.until(ExpectedConditions.visibilityOf(widgetCard));
+                widgetProduct.get(i).click();
+                return new ShopPage(webDriver);
+            }
+        }
+        return new ShopPage(webDriver);
+
+    }
+    public HomePage goFromWidgetButtonToShoppingCard(){
+        widgetButton.click();
+        return new HomePage(webDriver);
+    }
 }

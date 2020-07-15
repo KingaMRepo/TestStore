@@ -6,11 +6,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditAddressPage extends Menu {
     @FindBy(tagName = "h3")
     private WebElement header;
-    @FindBy(xpath = ".//a[contains(@href, 'rozliczeniowy')]")
-    private WebElement addressAndBillingEditButton;
     @FindBy(id = "billing_first_name")
     private WebElement userNameInput;
     @FindBy(id = "billing_last_name")
@@ -33,24 +34,38 @@ public class EditAddressPage extends Menu {
     private WebElement phoneNumber;
     @FindBy(name="save_address")
     private WebElement submitButton;
+    @FindBy(css="[class~='woocommerce-Address']>[class~='woocommerce-Address-title']+address")
+    private WebElement paymentAddress;
+    @FindBy(id="billing_state")
+    private WebElement billingState;
+    @FindBy(css="div.woocommerce-message")
+    private WebElement editBillingAddressAlert;
+    @FindBy(css=".woocommerce-error>li")
+    private List<WebElement>errors;
 
-    public EditAddressPage(WebDriver driver, String headerText) {
+    public EditAddressPage(WebDriver driver)
+    {
         super(driver);
-        wait.until(ExpectedConditions.textToBePresentInElement(header, headerText));
+        wait.until(ExpectedConditions.textToBePresentInElement(header, "Adres rozliczeniowy"));
     }
-    public MyAccountPage clickAddressAndBillingEditButton(){
-        addressAndBillingEditButton.click();
-        return new MyAccountPage(webDriver);
-    }
+
     public void enterBillingUserName(String name) {
         userNameInput.clear();
         userNameInput.sendKeys(name);
+    }
+    public void clearBillingUserName() {
+        userNameInput.clear();
     }
 
     public void enterBillingUserLastName(String lastName) {
         userLastNameInput.clear();
         userLastNameInput.sendKeys(lastName);
     }
+
+    public void clearBillingUserLastName() {
+        userLastNameInput.clear();
+    }
+
 
     public void enterOptionalBillingCountry(String billingCountry) {
         companyInput.clear();
@@ -67,6 +82,10 @@ public class EditAddressPage extends Menu {
         address1Input.sendKeys(billingAddress1);
     }
 
+    public void clearBillingAddress1() {
+        address1Input.clear();
+    }
+
     public void enterBillingAddress2(String billingAddress2) {
         address2Input.clear();
         address2Input.sendKeys(billingAddress2);
@@ -77,20 +96,59 @@ public class EditAddressPage extends Menu {
         cityInput.sendKeys(billingCity);
     }
 
+    public void clearBillingCity() {
+        cityInput.clear();
+    }
+
+    public void enterBillingRegion(String billingRegion) {
+        billingState.clear();
+        billingState.sendKeys(billingRegion);
+    }
+
+    public void clearBillingRegion() {
+        billingState.clear();
+    }
+
     public void enterBillingPostCode(String billingPostCode) {
         postCodeInput.clear();
         postCodeInput.sendKeys(billingPostCode);
+    }
+
+    public void clearBillingPostCode() {
+        postCodeInput.clear();
     }
 
     public void enterBillingPhoneNumber(String BillingNumber) {
         phoneNumber.clear();
         phoneNumber.sendKeys(BillingNumber);
     }
+
+    public void clearBillingPhoneNumber() {
+        phoneNumber.clear();
+    }
+
     public MyAccountPage clickBillingSubmitButton() {
         submitButton.click();
         return new MyAccountPage(webDriver);
     }
 
+    public String getPaymentAddress(){
+        wait.until(ExpectedConditions.visibilityOf(paymentAddress));
+        return paymentAddress.getText();
+    }
+
+    public Boolean isEditBillingAddressAlertDisplayed(){
+        return editBillingAddressAlert.isDisplayed();
+    }
+
+    public List<String> getErrorLabels(){
+        List<String>labels = new ArrayList<>();
+        for (int i = 0; i <errors.size(); i++) {
+            labels.add(errors.get(i).getText());
+        }
+        return labels;
+    }
+//Edit shipping address
 
 }
 
