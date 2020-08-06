@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-public class Menu extends PageObject {
+public abstract class Menu extends PageObject {
     @FindBy(id = "menu-item-381")
     private  WebElement homeButton;
     @FindBy(id = "menu-item-829")
@@ -23,7 +23,7 @@ public class Menu extends PageObject {
     private WebElement wishListButton;
     @FindBy(xpath = ".//li[@id = 'menu-item-828']/a")
     private WebElement aboutButton;
-    @FindBy(className = "ast-cart-menu-wrap")
+    @FindBy(xpath = "//a[@class='cart-container']")
     private WebElement shoppingCardButton;
     @FindBy (className = "site-logo-img")
     private WebElement logoButton;
@@ -42,6 +42,7 @@ public class Menu extends PageObject {
 
     public Menu(WebDriver driver) {
         super(driver);
+
     }
 
     public ContactPage clickContact() {
@@ -97,6 +98,8 @@ public class Menu extends PageObject {
     }
 
     public ShoppingCardPage clickShoppingCard() {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(shoppingCardButton).build().perform();
         shoppingCardButton.click();
         return new ShoppingCardPage(webDriver);
     }

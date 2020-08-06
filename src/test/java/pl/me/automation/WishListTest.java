@@ -32,8 +32,8 @@ public class WishListTest {
       homePage.addProductsToWishList(0);
       homePage.addProductsToWishList(1);
       WishListPage wistListPage = homePage.clickWistListPage();
-      wistListPage.addProductFromWishListToCard(0);
-      assertThat(wistListPage.getProductName()).containsExactly("DNK Gray Shoes");
+      ShoppingCardPage shoppingCardPage = wistListPage.addProductFromWishListToCard(0);
+      assertThat(shoppingCardPage.getProductName()).containsExactly("DNK Gray Shoes");
   }
 
   @Test
@@ -43,6 +43,5 @@ public class WishListTest {
       WishListPage wishListPage = homePage.clickWistListPage();
       wishListPage = wishListPage.removeProductsByName("DNK Gray Shoes");
       assertTrue(wishListPage.isRemoveAlertDisplay());
-
   }
 }

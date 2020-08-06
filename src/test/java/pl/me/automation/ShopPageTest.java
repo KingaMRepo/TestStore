@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +30,7 @@ public class ShopPageTest {
     public void destroy() {
         //webDriver.close();
     }
-//Sorting products
+
     @Test
     public void shouldFindProductByWritingCorrectPhrase() {
         ShopPage shopPage = homePage.clickShop();
@@ -48,14 +49,16 @@ public class ShopPageTest {
     public void shouldSortProductByItsRate() {
         ShopPage shopPage = homePage.clickShop();
         shopPage.sortProducts("Sortuj wg średniej oceny");
+        shopPage = new ShopPage(webDriver);
+        assertThat(shopPage.getStarRating()).isSortedAccordingTo(Comparator.reverseOrder());
     }
 
     @Test
     public void shouldSortProductByItsPrice() {
         ShopPage shopPage = homePage.clickShop();
         shopPage.sortProducts("Sortuj wg ceny: od najwyższej");
+        assertThat(shopPage.getProductPrice()).isSortedAccordingTo(Comparator.reverseOrder());
     }
-
 
     @Test
     public void shouldGoFromSearchResultsToProductCardClickingOnProductSlidePhotoAndClose() {
@@ -76,17 +79,6 @@ public class ShopPageTest {
         List<String> filterLabels = shopPage.getFilterLabels();
         assertThat(filterLabels).containsExactly("Gray","XL");
     }
-
-
-    //shopPage.activeFiltersDeleteByIndex(1);
-    //shopPage.activeFiltersDeleteByName("30");
-    //homePage.deletingProductsFromWidget();
-    //shopPage.addToShoppingCardOneProductsMultiplyTimes();
-    //shopPage.addToShoppingCardManyProductsMultiplyTimes();
-    //assertThat(shoppingCardPage.getProductName()).containsExactly("Black Jacket", "Basic Blue Jeans");
-    //shoppingCardPage.removeProductsByName("Black Jacket");
-    //assertTrue(shoppingCardPage.isDisplayEmptyBasket());
-    //shopPage.addProductsToWishList(0);
 
     @Test
     public void shouldCheckIfPendingShoppingCardSumsUpWithNewAdded() {
@@ -115,16 +107,6 @@ public class ShopPageTest {
         assertThat(totalPrice + productPrice).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice());
     }
 
-    @Test
-    public void shouldAddProductFromItsCardAndAddProductFromRelatedProductsSection() {
-        ShopPage shopPage = homePage.clickShop();
-        shopPage.clickToShowSingleProductCard(1);
-        //singleProductPage.getSingleProductNameText();
-        //singleProductPage.clickAddToCardSingeProductButton();
-        //singleProductPage.getRecommendProductNameText();
-        //singleProductPage.clickRecommendProductButton();
-        //singleProductPage.clickShoppingCard();
-    }
 }
 
 

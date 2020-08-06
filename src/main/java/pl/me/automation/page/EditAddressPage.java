@@ -49,6 +49,7 @@ public class EditAddressPage extends Menu {
         wait.until(ExpectedConditions.textToBePresentInElement(header, "Adres rozliczeniowy"));
     }
 
+
     public void enterBillingUserName(String name) {
         userNameInput.clear();
         userNameInput.sendKeys(name);
@@ -148,7 +149,7 @@ public class EditAddressPage extends Menu {
         }
         return labels;
     }
-//Edit shipping address
+
 
 }
 

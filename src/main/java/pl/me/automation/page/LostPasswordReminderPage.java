@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LostPasswordReminderPage extends Menu {
 
-    public String resetText = "E-mail z linkiem do zresetowania hasła został wysłany na adres przypisany do twojego konta, może minąć kilka minut zanim pojawi się on w twojej skrzynce. Proszę poczekaj co najmniej 10 minut przed ponowną próbą resetu hasła.";
+    public static final String resetText = "E-mail z linkiem do zresetowania hasła został wysłany na adres przypisany do twojego konta, może minąć kilka minut zanim pojawi się on w twojej skrzynce. Proszę poczekaj co najmniej 10 minut przed ponowną próbą resetu hasła.";
 
     @FindBy(css=".woocommerce-notices-wrapper +[class]>p")
     private WebElement lostPasswordInfoText;

@@ -26,7 +26,7 @@ public class ContactPageTest extends MyProperties {
 
     @AfterEach
     public void destroy() {
-         webDriver.close();
+        webDriver.close();
     }
 
     @Test
@@ -39,17 +39,6 @@ public class ContactPageTest extends MyProperties {
         contactPage.enterMessage("Neque porro quisquam est qui dolorem ipsum quia");
         contactPage.clickSendMessageButton();
         assertTrue(contactPage.isContactMessageDisplayed());
-    }
-
-    @Test
-    public void shouldFillInAndSendFormWithLongMessage() {
-        ContactPage contactPage = homePage.clickContact();
-        contactPage.enterUserName("Dale");
-        contactPage.enterUserLastName("Cooper");
-        contactPage.selectMessageSubject("pytanie o produkt");
-        contactPage.enterEmailAddress("rirobim664@lefaqr5.com");
-        contactPage.enterMessage((String) properties.get("message"));
-        contactPage.clickSendMessageButton();
     }
 
     @Test

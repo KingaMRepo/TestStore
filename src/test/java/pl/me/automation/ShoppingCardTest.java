@@ -34,11 +34,6 @@ public class ShoppingCardTest {
          //webDriver.close();
     }
 
-    @Test
-    public void shouldAddProductsFromRecommendedProductSection() {
-        homePage.addProductToCardAndGoToShoppingCard();
-
-    }
 
     @Test
     public void shouldCheckIfFreeShippingIsDisplayedWhenShoppingCardSumMoreThan300(){
@@ -58,9 +53,19 @@ public class ShoppingCardTest {
         List<Product> productsFromBasket = shopPage.getProductsInBasket();
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         List<String> productNames = shoppingCardPage.getProductName();
+        assertThat(productsFromBasket.stream().map(Product::getName).collect(Collectors.toList())).contains(productNames.toArray(String[]::new));
         shoppingCardPage.removeProductsByName("Anchor Bracelet");
-        //assertThat()
-        //productsFromBasket.stream().map(Product::g).collect(Collectors.toList())
+        productsFromBasket.removeIf(product -> product.getName().equals("Anchor Bracelet"));
+        shoppingCardPage = new ShoppingCardPage(webDriver);
+        productNames = shoppingCardPage.getProductName();
+        assertThat(productsFromBasket.stream().map(Product::getName).collect(Collectors.toList())).contains(productNames.toArray(String[]::new));
+    }
+
+    @Test
+    public void shouldAddProductFromItsCardAndAddProductFromRelatedProductsSection(){
+        ShopPage shopPage = homePage.clickShop();
+
+
     }
 
 

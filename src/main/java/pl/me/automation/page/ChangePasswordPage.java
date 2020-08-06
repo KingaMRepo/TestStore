@@ -24,9 +24,10 @@ public class ChangePasswordPage extends Menu {
     private WebElement newPassword;
     @FindBy(id="password_2")
     private WebElement acceptNewPassword;
-    @FindBy(tagName ="save_account_details")
+    @FindBy(css ="[class~='woocommerce-Button']")
     private WebElement submitButton;
-
+    @FindBy(css="div.woocommerce-message")
+    private WebElement alert;
 
 
     public ChangePasswordPage(WebDriver driver) {
@@ -69,12 +70,20 @@ public class ChangePasswordPage extends Menu {
         acceptNewPassword.sendKeys(acceptPassword);
     }
 
-    public ChangePasswordPage submitPassword(){
+    public MyAccountPage submitPassword(){
         //Actions actions = new Actions(webDriver);
         //actions.moveToElement(submitButton).build().perform();
         //wait.until(ExpectedConditions.elementToBeClickable(submitButton));
         submitButton.click();
-        return new ChangePasswordPage(webDriver);
+        return new MyAccountPage(webDriver);
+    }
+
+    public String getAlertText(){
+        return alert.getText();
+    }
+
+    public Boolean isAlertDisplayed(){
+        return alert.isDisplayed();
     }
 
 

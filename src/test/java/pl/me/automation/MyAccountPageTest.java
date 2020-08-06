@@ -29,7 +29,6 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         //webDriver.close();
     }
 
-    //Registration tests
     @Test
     public void shouldCorrectlyRegisterUser() {
         LocalDateTime now = LocalDateTime.now();
@@ -38,7 +37,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         myAccountPage.enterRegisterUserEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
         myAccountPage.enterRegisterUserPassword("Qwer123!@#&*");
         myAccountPage.clickRegister();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isFalse();
+        assertThat(myAccountPage.isWelcomeToMyAccountTextDisplay());
     }
 
     @Test
@@ -73,7 +72,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         myAccountPage.clickRegisterFalse();
         assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
     }
-    //Login tests
+
     @Test
     public void shouldLoginWithEmptyRegistrationForm() {
         LocalDateTime now = LocalDateTime.now();
@@ -86,7 +85,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     public void shouldCorrectlyLoginAsUser() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         fillLoginForm(myAccountPage);
-        assertThat(myAccountPage.getUserNameText().contains("user99"));
+        assertThat(myAccountPage.getUserNameText().contains("user134"));
     }
 
     @Test
@@ -94,7 +93,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.enterLoginUserNameOrEmail("user00@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
+        myAccountPage.enterLoginUserLoginPassword("x6Z7Vr%zh3N?HvD");
         myAccountPage.clickLoginSubmit();
         assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
     }
@@ -102,7 +101,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldLoginWithIncorrectUserPassword() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
+        myAccountPage.enterLoginUserNameOrEmail("user134@nazwa.pl");
         myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&");
         myAccountPage.clickLoginSubmit();
         assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
@@ -122,7 +121,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&");
         myAccountPage.clickLoginSubmit();
         LostPasswordReminderPage lostPasswordReminderPage = myAccountPage.clickLostPasswordReminderButton();
-        lostPasswordReminderPage.insertUserLoginOrEmail("user555");
+        lostPasswordReminderPage.insertUserLoginOrEmail("user134@nazwa.pl");
         lostPasswordReminderPage.clickResetPasswordButton();
         assertThat(lostPasswordReminderPage.getResetPasswordText()).isEqualTo(lostPasswordReminderPage.resetText);
     }
@@ -145,9 +144,8 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         assertThat(userName).isEqualTo(userNameBackspace);
     }
 
-//Displaying customer information
     @Test
-    public void shouldGoFromOrderToOrdersList() {
+    public void shouldGoFromOrderToOrdersListAndCheckIfOrderNumberIsOnTheList() {
         ShopPage shopPage = homePage.clickShop();
         shopPage.addProductsToBasket("Black Jacket");
         shopPage.addProductsToBasket("Basic Blue Jeans");
@@ -173,13 +171,11 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         String lastOrder = myAccountPage.getOrderListLastOrder();
         assertThat(orderNumber).isEqualTo(lastOrder);
     }
-//Edit billing address
+
     @Test
     public void shouldEditAndCorrectlyFillInBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
-        myAccountPage.clickLoginSubmit();
+        fillLoginForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
         EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.enterBillingUserName("Aglaea");
@@ -197,9 +193,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldEditAndIncorrectlyFillInBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
-        myAccountPage.clickLoginSubmit();
+        fillLoginForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
         EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.enterBillingUserName("");
@@ -217,9 +211,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldEditAndSendEmptyBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
-        myAccountPage.clickLoginSubmit();
+        fillLoginForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
         EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.clearBillingUserName();
@@ -232,51 +224,21 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.getErrorLabels()).containsExactly("Imię jest wymaganym polem.", "Nazwisko jest wymaganym polem.", "Ulica jest wymaganym polem.", "Miasto jest wymaganym polem.", "Województwo / Region jest wymaganym polem.", "Kod pocztowy jest wymaganym polem.", "Telefon jest wymaganym polem.");
     }
-//Test nie przechodzi ponieważ button jest hidden
+
     @Test
     public void shouldCorrectlyFillInChangePasswordAndAccountDetailsForm(){
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         fillLoginForm(myAccountPage);
         ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
         changePasswordPage.enterAccountFirstName("aaa");
-        changePasswordPage.enterAccountLastName("bbb");
-        changePasswordPage.enterAccountDisplayName("aabb");
-        changePasswordPage.enterAccountEmail("user99@nazwa.pl");
-        changePasswordPage.enterCurrentPassword("9[}JX7v]Y1m5&Lgqb");
-        changePasswordPage.enterNewPassword("9[}JX7v]Y1m5&$$");
-        changePasswordPage.acceptNewPassword("9[}JX7v]Y1m5&$$");
+        changePasswordPage.enterAccountLastName("zzz");
+        changePasswordPage.enterAccountDisplayName("aaa");
+        changePasswordPage.enterAccountEmail("user199@nazwa.pl");
+        changePasswordPage.enterAccountDisplayName("aaa");
+        changePasswordPage.enterCurrentPassword("");
+        changePasswordPage.enterNewPassword("");
+        changePasswordPage.acceptNewPassword("");
         changePasswordPage.submitPassword();
-    }
-
-    @Test
-    public void shouldGoFromOrderListAndCheckIfPaymentDetailsAreEqualsToMyAccountPaymentDetails() {
-        ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Black Jacket");
-        shopPage.addProductsToBasket("Basic Blue Jeans");
-        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        LocalDateTime now = LocalDateTime.now();
-        paymentPage.enterBillingUserName("rafałł");
-        paymentPage.enterBillingUserLastName("kwiatkowski");
-        paymentPage.selectBillingCountry(1);
-        paymentPage.enterBillingUserAddress("Kwiatowa");
-        paymentPage.enterBillingUserCity("Poznań");
-        paymentPage.enterBillingUserPostCode("60001");
-        paymentPage.enterBillingUserPhone("600500400");
-        paymentPage.enterBillingUserEmail("qwert!#11" + now.toString().replaceAll(":", "-") + "@nazwa.pl");
-        paymentPage.enterBillingAccountUsername("zxcvbn" + UUID.randomUUID().toString());
-        paymentPage.enterBillingAccountPassword("&%SIytrdf!90" + now.toString().replaceAll(":", "-"));
-        paymentPage.deselectShipToDifferentAddressCheckbox();
-        paymentPage.acceptTermsAndConditionsCheckbox();
-        OrderPage orderPage = paymentPage.paymentAccept();
-        String orderPaymentDetails = orderPage.getOrderPaymentDetails();
-        MyAccountPage myAccountPage = paymentPage.clickMyAccountWaitForOrder();
-        myAccountPage.clickPaymentAndDeliveryAddressesButton();
-        String paymentAddress = myAccountPage.getPaymentAddress();
-        //myAccountPage.clickMyAccount();
-        //myAccountPage.goToOrdersList();
-        //myAccountPage.clickOrderDetailsButton(0);
-        //String paymentAddress = myAccountPage.getPaymentAddress();
 
     }
 

@@ -6,17 +6,19 @@ import pl.me.automation.page.PaymentPage;
 public abstract class MyAccountLogInForm {
 
     public void fillLoginForm(MyAccountPage myAccountPage){
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
+        myAccountPage.enterLoginUserNameOrEmail("user134@nazwa.pl");
+        myAccountPage.enterLoginUserLoginPassword("B{}h8~GS/(.KL5km");
         myAccountPage.clickLoginSubmit();
     }
 
     public void fillLoginFormWitRememberMeCheckbox(MyAccountPage myAccountPage){
-        myAccountPage.enterLoginUserNameOrEmail("user99@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&Lgqb");
+        myAccountPage.enterLoginUserNameOrEmail("user134@nazwa.pl");
+        myAccountPage.enterLoginUserLoginPassword("B{}h8~GS/(.KL5km");
         myAccountPage.clickLoginRememberMeCheckbox();
         myAccountPage.clickLoginSubmit();
     }
+
+
 
 
 }

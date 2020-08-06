@@ -6,11 +6,13 @@ public class Product {
     private WebElement button;
     private String price;
     private Integer quantity;
+    private String name;
 
-    public Product(WebElement button, String price, Integer quantity) {
+    public Product(WebElement button, String price, Integer quantity, String name) {
         this.button = button;
         this.price = price;
         this.quantity = quantity;
+        this.name = name;
     }
 
     public WebElement getButton() {
@@ -27,5 +29,13 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

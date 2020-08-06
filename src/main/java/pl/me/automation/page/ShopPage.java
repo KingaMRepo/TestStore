@@ -54,17 +54,28 @@ public class ShopPage extends Menu {
     @FindBy(css="astra-shop-thumbnail-wrap")
     private List<WebElement> productsImageList;
     private List<WebElement>filterNames;
+    @FindBy(css="[class~='woocommerce-Price-amount']")
+    private List<WebElement>filterPrices;
+    @FindBy(css="ul[class ~= 'columns-4']>li:first-child")
+    private WebElement firstRateSortedProduct;
+    @FindBy(xpath="//div[@class='star-rating']/span")
+    private  List<WebElement>starRating;
+    @FindBy(css=".price>span")
+    private  List<WebElement>productPrice;
+
 
 
     private Map<String, Product> products = new HashMap<>();
     private List<Product>productsInBasket = new ArrayList<>();
+    List<String> priceList = new ArrayList<>();
 
 
     public ShopPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(h2Header, "Szukaj produktu"));
+        wait.until(ExpectedConditions.elementToBeClickable(h2Header));
         for (int i = 0; i <productNames.size(); i++) {
-            products.put(productNames.get(i).getText(), new Product(productButton.get(i), productPrices.get(i).getText(), 0));
+            products.put(productNames.get(i).getText(), new Product(productButton.get(i), productPrices.get(i).getText(), 0, productNames.get(i).getText()));
         }
 
     }
@@ -181,6 +192,36 @@ public class ShopPage extends Menu {
 
     public void clickToShowSingleProductCard(Integer index){
         productsImageList.get(index).click();
+
+    }
+
+    public List<String> getFilteredPrices() {
+        List<String> priceList = new ArrayList<>();
+        for (int i = 0; i < filterPrices.size(); i++) {
+            priceList.add(filterPrices.get(i).getText());
+        }
+        return priceList;
+    }
+
+    public List<Double> getStarRating(){
+        List<Double>rating = new ArrayList<>();
+        for (int i = 0; i <starRating.size() ; i++) {
+            String ratingNumber = starRating.get(i).getText();
+            System.out.println(ratingNumber);
+            if(ratingNumber != null && !ratingNumber.isEmpty()){
+                rating.add(Double.parseDouble(ratingNumber.replaceAll("\\D+", "")));
+            }
+        }
+        return rating;
+    }
+
+    public List<String>getProductPrice(){
+        List<String>price = new ArrayList<>();
+        for (int i = 0; i <productPrice.size() ; i++) {
+            price.add(productPrice.get(i).getText());
+        }
+        return price;
+
 
     }
 

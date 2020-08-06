@@ -6,8 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import pl.me.automation.domain.Product;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static javax.swing.UIManager.get;
 
@@ -37,22 +41,30 @@ public class HomePage extends Menu {
     private WebElement cookiePrivacyPolicyButton;
     @FindBy(className = "cookie-notice-container")
     private WebElement cookieNoticeContainer;
-    @FindBy(id = ".astra-shop-summary-wrap>.star-rating+a")
+    @FindBy(css = ".astra-shop-summary-wrap>.star-rating+a")
     private List<WebElement> recommendedProducts;
+    @FindBy(css=".astra-shop-summary-wrap>a>h2")
+    private List<WebElement> recommendedProductsNames;
+
+
+    private Map<String, Product> products = new HashMap<>();
+    private List<Product>productsInBasket = new ArrayList<>();
 
 
     public HomePage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.visibilityOf(buyButton));
+        for (int i = 0; i <recommendedProductsNames.size(); i++) {
+            products.put(recommendedProductsNames.get(i).getText(), new Product(recommendedProducts.get(i), null, 0, recommendedProductsNames.get(i).getText()));
+        }
     }
 
     public void clickCookie() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(cookieNotice));
+            wait.until(ExpectedConditions.elementToBeClickable(acceptCookieButton));
             acceptCookieButton.click();
         } catch (ElementNotInteractableException e) {
             System.err.println("Ciasteczko nie wyświetliło się");
-
         }
     }
 
@@ -84,21 +96,20 @@ public class HomePage extends Menu {
         cookieRefuseButton.click();
     }
 
-    public HomePage clickPrivacyPolicyButton() {
-        cookiePrivacyPolicyButton.click();
-        return new HomePage(webDriver);
-    }
-
-    public Boolean isCookieAcceptButtonDisplayed() {
-        return cookieAcceptButton.isDisplayed();
-    }
 
     public Boolean isCookieRefuseButtonDisplayed() {
         return cookieRefuseButton.isDisplayed();
     }
 
 
-    public void addRecommendedProductsToBasket(Integer index) {
-        recommendedProducts.get(index).click();
+    public void addRecommendedProductsToBasket(String name) {
+        products.get(name).getButton().click();
+        productsInBasket.add(products.get(name));
     }
+
+    public List<Product> getProductsInBasket() {
+        return productsInBasket;
+    }
+
+
 }

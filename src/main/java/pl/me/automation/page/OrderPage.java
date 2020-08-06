@@ -1,5 +1,7 @@
 package pl.me.automation.page;
 
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,16 +19,13 @@ public class OrderPage extends Menu {
     public WebElement orderPaymentDetails;
 
 
+
     public OrderPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Zamówienie"));
     }
 
-    public void refreshPage(){
-        wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Zamówienie"));
-        webDriver.navigate().refresh();
 
-    }
 
     public Boolean isReceivedOrderAlertDisplayed(){
         wait.until(ExpectedConditions.visibilityOf(receivedOrderAlert));

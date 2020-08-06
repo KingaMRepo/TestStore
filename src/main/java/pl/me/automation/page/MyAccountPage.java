@@ -68,13 +68,14 @@ public class MyAccountPage extends Menu {
     private WebElement lostPasswordUserLogin;
     @FindBy(css=".woocommerce-message+p")
     private WebElement resetPasswordSuccessSendAlert;
+    @FindBy(css=".woocommerce-MyAccount-content>p+p")
+    private WebElement welcomeToMyAccountText;
 
 
     public MyAccountPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(header, "Moje konto"));
     }
-
 
     public void enterRegisterUserName(String name) {
         userNameInput.clear();
@@ -210,14 +211,18 @@ public class MyAccountPage extends Menu {
         lostPasswordUserLogin.sendKeys(user);
     }
 
-    public MyAccountPage clickResetPasswordSubmitButton() {
+    public ChangePasswordPage clickResetPasswordSubmitButton() {
         resetPasswordSubmitButton.click();
-        return new MyAccountPage(webDriver);
+        return new ChangePasswordPage(webDriver);
     }
 
     public String getResetPasswordSuccessSendAlert(){
         return resetPasswordSuccessSendAlert.getText();
     }
 
+   public Boolean isWelcomeToMyAccountTextDisplay(){
+       return welcomeToMyAccountText.isDisplayed();
+
+   }
 
 }

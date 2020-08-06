@@ -48,7 +48,7 @@ public class WishListPage extends Menu {
     }
 
     public Boolean isRemoveAlertDisplay(){
-        wait.until(ExpectedConditions.invisibilityOf(removeAlert));
+        wait.until(ExpectedConditions.elementToBeClickable(header));
         return removeAlert.isDisplayed();
     }
 }

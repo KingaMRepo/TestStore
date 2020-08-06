@@ -3,6 +3,8 @@ package pl.me.automation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.*;
@@ -17,6 +19,7 @@ public class PaymentPageTest extends PaymentForm {
     private WebDriver webDriver;
     private HomePage homePage;
 
+
     @BeforeEach
     public void init() {
         webDriver = WebDriverType.CHROME.create();
@@ -30,7 +33,7 @@ public class PaymentPageTest extends PaymentForm {
         //webDriver.close();
     }
 
-    //Payment tests
+
     @Test
     public void shouldAddCouponCodeAndCheckIfAppliedCorrectly() {
         ShopPage shopPage = homePage.clickShop();
@@ -142,7 +145,6 @@ public class PaymentPageTest extends PaymentForm {
         assertThat(paymentPage.getFormValidationErrorText()).isEqualTo("Shipping Kod pocztowy");
     }
 
-//Payment tests - registered user login
     @Test
     public void shouldCorrectlyLogInOnPaymentPageAsRegisteredUser() {
         ShopPage shopPage = homePage.clickShop();
@@ -183,20 +185,6 @@ public class PaymentPageTest extends PaymentForm {
         assertThat(myAccountPage.getResetPasswordSuccessSendAlert()).isEqualTo("E-mail z linkiem do zresetowania hasła został wysłany na adres przypisany do twojego konta, może minąć kilka minut zanim pojawi się on w twojej skrzynce. Proszę poczekaj co najmniej 10 minut przed ponowną próbą resetu hasła.");
     }
 
-
-    //Payment methods tests
-    @Test
-    public void shouldSelectionBankTransferAsPaymentMethodAcceptPurchaseAndRefreshPage() {
-        ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
-        PaymentPage paymentPage = shoppingCardPage1.proceedToCheckout();
-        fillPaymentForm(paymentPage);
-        paymentPage.deselectShipToDifferentAddressCheckbox();
-        paymentPage.acceptTermsAndConditionsCheckbox();
-        OrderPage orderPage = paymentPage.paymentAccept();
-        //orderPage.refreshPage();
-    }
 
 
 }

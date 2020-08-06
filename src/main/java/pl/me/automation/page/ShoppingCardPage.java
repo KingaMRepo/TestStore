@@ -19,7 +19,7 @@ public class ShoppingCardPage extends Menu{
     private List<WebElement> deliveryRadioButtonsLabels;
     @FindBy(xpath = "//td[@class ='product-name']")
     private List<WebElement> productFromBasket;
-    @FindBy(className = "product-remove")
+    @FindBy(css = ".product-remove>a")
     private List<WebElement> removeProductFromBasket;
     @FindBy(className = "cart-empty")
     private WebElement emptyBasketLabel;
@@ -33,8 +33,9 @@ public class ShoppingCardPage extends Menu{
     public ShoppingCardPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Koszyk"));
+        wait.until(ExpectedConditions.elementToBeClickable(h1Header));
         for (int i = 0; i <productFromBasket.size() ; i++) {
-            products.put(productFromBasket.get(i).getText(),new Product(removeProductFromBasket.get(i), null, null));
+            products.put(productFromBasket.get(i).getText(),new Product(removeProductFromBasket.get(i), null, null, productFromBasket.get(i).getText()));
         }
     }
 
@@ -48,6 +49,7 @@ public class ShoppingCardPage extends Menu{
 
 
     public List<String> getProductName() {
+        wait.until(ExpectedConditions.elementToBeClickable(h1Header));
         List<String> list = new ArrayList<>();
         for (int i = 0; i < productFromBasket.size(); i++) {
             list.add(productFromBasket.get(i).getText());

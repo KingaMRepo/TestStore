@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import pl.me.automation.config.WebDriverType;
+import pl.me.automation.domain.Product;
 import pl.me.automation.page.*;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,20 +43,11 @@ public class HomePageTest {
         String totalPrice = shopPage.getWidgetTotalPrice();
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         assertThat(totalPrice.replace("Kwota: zł", "")).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice()+ "0");
-
     }
     @Test
         public void shouldAddProductToWishList() {
         homePage.addProductsToWishList(0);
         assertThat(homePage.isWishListPopupMessageDisplayed()).isTrue();
-    }
-
-    //Aby uruchomić testy ciasteczek, nalezy najpierw zakomentować metodę clickCookie()
-// pod adnotacją  @BeforeEach na każdym page'u testowym.
-    @Test
-    public void shouldAcceptCookie() {
-        homePage.acceptCookie();
-        assertThat(homePage.isCookieAcceptButtonDisplayed()).isFalse();
     }
 
     @Test
@@ -64,8 +58,13 @@ public class HomePageTest {
 
     @Test
     public void addRecommendedProductToBasket(){
-        homePage.addRecommendedProductsToBasket(1);
-        homePage.addRecommendedProductsToBasket(2);
+        homePage.addRecommendedProductsToBasket("DNK Gray Shoes");
+        homePage.addRecommendedProductsToBasket("DNK Blue Sport Shoes");
+        List<Product> products =  homePage.getProductsInBasket();
+        HomePage homePage = new HomePage(webDriver);
+        ShoppingCardPage shoppingCardPage = homePage.clickShoppingCard();
+        List<String> productNames = shoppingCardPage.getProductName();
+        assertThat(productNames).containsExactly(products.stream().map(Product::getName).toArray(String[]::new));
     }
 
 }

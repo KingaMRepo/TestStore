@@ -109,7 +109,6 @@ public class PaymentPage extends Menu {
         wait.until(ExpectedConditions.textToBePresentInElement(h3Header, "Dane płatności"));
     }
 
-//Payment details form
     public void enterBillingUserName(String name) {
         paymentUserNameInput.clear();
         paymentUserNameInput.sendKeys(name);
@@ -164,7 +163,7 @@ public class PaymentPage extends Menu {
         paymentPassword.clear();
         paymentPassword.sendKeys(password);
     }
-    // end of payment details form
+
 
     public void deselectShipToDifferentAddressCheckbox() {
         shipToDifferentAddressCheckbox.click();
@@ -220,7 +219,7 @@ public class PaymentPage extends Menu {
         return appliedCouponAlertMessage.isDisplayed();
     }
 
-//Choosing other shipping address
+
     public void enterShippingUserName(String name) {
         shippingFirstName.clear();
         shippingFirstName.sendKeys(name);
@@ -255,7 +254,6 @@ public class PaymentPage extends Menu {
         shippingCity.clear();
         shippingCity.sendKeys(city);
     }
-// End of payment details form
 
     public Double getProductPriceAmount() {
         wait.until(ExpectedConditions.visibilityOf(priceAmount));
@@ -278,7 +276,7 @@ public class PaymentPage extends Menu {
         accountLoginButton.click();
     }
 
-    //Login form for registered user
+
     public MyAccountPage enterUserNameOrEmail(String username) {
         userNameOrEmailField.clear();
         userNameOrEmailField.sendKeys(username);
@@ -295,7 +293,7 @@ public class PaymentPage extends Menu {
         wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
         actions.moveToElement(loginSubmitButton).click().build().perform();
     }
-//End of login form for registered user
+
     public String getErrorText() {
         wait.until(ExpectedConditions.visibilityOf(error));
         return error.getText();
@@ -317,11 +315,17 @@ public class PaymentPage extends Menu {
         wait.until(ExpectedConditions.visibilityOf(formValidationError));
         return formValidationError.getText();
     }
-//Lost password reminder;
+
     public MyAccountPage clickLostPasswordButton() {
         wait.until(ExpectedConditions.elementToBeClickable(lostPasswordButton));
         lostPasswordButton.click();
         return new MyAccountPage(webDriver);
+    }
+
+    public void refreshPage(){
+        wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Zamówienie"));
+        webDriver.navigate().refresh();
+
     }
 
 
