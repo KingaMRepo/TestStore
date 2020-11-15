@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class Menu extends PageObject {
     @FindBy(id = "menu-item-381")
-    private  WebElement homeButton;
+    private WebElement homeButton;
     @FindBy(id = "menu-item-829")
     private WebElement contactButton;
     @FindBy(id = "menu-item-45")
@@ -25,19 +25,18 @@ public abstract class Menu extends PageObject {
     private WebElement aboutButton;
     @FindBy(xpath = "//a[@class='cart-container']")
     private WebElement shoppingCardButton;
-    @FindBy (className = "site-logo-img")
+    @FindBy(className = "site-logo-img")
     private WebElement logoButton;
     @FindBy(className = "ast-site-header-cart-li")
     private WebElement widgetButton;
-    @FindBy(css ="a[class*='remove_from_cart_button']")
-    private List<WebElement>widgetProduct;
-    @FindBy(css="div[class='ast-site-header-cart-data'] >div > div>ul > li > a:nth-child(2) ")
-    private List<WebElement>widgetProductNames;
-    @FindBy(css ="div[class*='widget_shopping_cart']")
+    @FindBy(css = "a[class*='remove_from_cart_button']")
+    private List<WebElement> widgetProduct;
+    @FindBy(css = "div[class='ast-site-header-cart-data'] >div > div>ul > li > a:nth-child(2) ")
+    private List<WebElement> widgetProductNames;
+    @FindBy(css = "div[class*='widget_shopping_cart']")
     private WebElement widgetCard;
     @FindBy(tagName = "h1")
     public WebElement h1Header;
-
 
 
     public Menu(WebDriver driver) {
@@ -60,16 +59,18 @@ public abstract class Menu extends PageObject {
                 selectedCategory = shopSubMenu.get(i);
             }
         }
-        selectedCategory.click();
+        if (selectedCategory != null) {
+            selectedCategory.click();
+        }
         return new ShopPage(webDriver);
     }
 
-    public ShopPage clickShop(){
+    public ShopPage clickShop() {
         shopButton.click();
         return new ShopPage(webDriver);
     }
 
-    public HomePage clickHome(){
+    public HomePage clickHome() {
         homeButton.click();
         return new HomePage(webDriver);
     }
@@ -104,7 +105,7 @@ public abstract class Menu extends PageObject {
         return new ShoppingCardPage(webDriver);
     }
 
-    public HomePage clickLogo(){
+    public HomePage clickLogo() {
         logoButton.click();
         return new HomePage(webDriver);
     }
@@ -113,9 +114,10 @@ public abstract class Menu extends PageObject {
         Actions actions = new Actions(webDriver);
         actions.moveToElement(widgetButton).build().perform();
     }
-    public ShopPage deleteProductFromWidgetByName(String name){
-        for (int i = 0; i <widgetProductNames.size(); i++) {
-            if(widgetProductNames.get(i).getText().equals(name)){
+
+    public ShopPage deleteProductFromWidgetByName(String name) {
+        for (int i = 0; i < widgetProductNames.size(); i++) {
+            if (widgetProductNames.get(i).getText().equals(name)) {
                 wait.until(ExpectedConditions.visibilityOf(widgetCard));
                 widgetProduct.get(i).click();
                 return new ShopPage(webDriver);
@@ -124,7 +126,8 @@ public abstract class Menu extends PageObject {
         return new ShopPage(webDriver);
 
     }
-    public HomePage goFromWidgetButtonToShoppingCard(){
+
+    public HomePage goFromWidgetButtonToShoppingCard() {
         widgetButton.click();
         return new HomePage(webDriver);
     }

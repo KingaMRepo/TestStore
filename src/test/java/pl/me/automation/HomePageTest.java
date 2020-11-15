@@ -28,8 +28,9 @@ public class HomePageTest {
 
     @AfterEach
     public void destroy() {
-        //webDriver.close();
+        //webDriver.quit();
     }
+
 
     @Test
     public void shouldDeleteProductsFromWidget() {
@@ -44,6 +45,7 @@ public class HomePageTest {
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         assertThat(totalPrice.replace("Kwota: zł", "")).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice()+ "0");
     }
+
     @Test
         public void shouldAddProductToWishList() {
         homePage.addProductsToWishList(0);

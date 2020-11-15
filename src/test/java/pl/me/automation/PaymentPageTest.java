@@ -3,19 +3,15 @@ package pl.me.automation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.*;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PaymentPageTest extends PaymentForm {
+public class PaymentPageTest extends Forms {
     private WebDriver webDriver;
     private HomePage homePage;
 
@@ -26,13 +22,13 @@ public class PaymentPageTest extends PaymentForm {
         webDriver.get("https://www.storetestproject.hekko24.pl/");
         homePage = new HomePage(webDriver);
         homePage.clickCookie();
+
     }
 
     @AfterEach
     public void destroy() {
-        //webDriver.close();
+        webDriver.manage().deleteAllCookies();
     }
-
 
     @Test
     public void shouldAddCouponCodeAndCheckIfAppliedCorrectly() {
@@ -40,7 +36,7 @@ public class PaymentPageTest extends PaymentForm {
         shopPage.addProductsToBasket("Anchor Bracelet");
         ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage1.proceedToCheckout();
-        paymentPage.addCouponCode("k3zmxkuk");
+        paymentPage.applyCouponCode("AD8PGRAD");
         paymentPage = new PaymentPage(webDriver);
         assertTrue(paymentPage.isAppliedCouponAlertMessageDisplayed());
         Double priceAmount = paymentPage.getProductPriceAmount();
@@ -56,8 +52,9 @@ public class PaymentPageTest extends PaymentForm {
         shopPage.addProductsToBasket("Anchor Bracelet");
         ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage1.proceedToCheckout();
-        fillPaymentForm(paymentPage);
+        fillInPaymentForm(paymentPage);
         paymentPage.deselectShipToDifferentAddressCheckbox();
+        paymentPage.choosePaymentMethod("payu");
         paymentPage.acceptTermsAndConditionsCheckbox();
         OrderPage orderPage = paymentPage.paymentAccept();
         assertThat(orderPage.isOrderAcceptMessageIsDisplay()).isTrue();
@@ -124,8 +121,8 @@ public class PaymentPageTest extends PaymentForm {
         shopPage.addProductsToBasket("Anchor Bracelet");
         ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage1.proceedToCheckout();
-        fillPaymentForm(paymentPage);
-        fillPaymentFormOtherAddress(paymentPage);
+        fillInPaymentForm(paymentPage);
+        fillInPaymentFormOtherAddress(paymentPage);
         assertThat(paymentPage.isShipToDifferentAddressCheckboxChecked()).isTrue();
         paymentPage.acceptTermsAndConditionsCheckbox();
         OrderPage orderPage = paymentPage.paymentAccept();
@@ -138,8 +135,8 @@ public class PaymentPageTest extends PaymentForm {
         shopPage.addProductsToBasket("Anchor Bracelet");
         ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage1.proceedToCheckout();
-        fillPaymentForm(paymentPage);
-        fillPaymentFormOtherAddressIncorrectly(paymentPage);
+        fillInPaymentForm(paymentPage);
+        fillInPaymentFormOtherAddressIncorrectly(paymentPage);
         paymentPage.acceptTermsAndConditionsCheckbox();
         paymentPage.paymentAccept();
         assertThat(paymentPage.getFormValidationErrorText()).isEqualTo("Shipping Kod pocztowy");
@@ -152,11 +149,11 @@ public class PaymentPageTest extends PaymentForm {
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
         paymentPage.clickLoginButton();
-        paymentPage.enterUserNameOrEmail("user6781");
-        paymentPage.enterUserPassword("gY4+/hDRHb%u7");
+        paymentPage.enterUserNameOrEmail("euookv");
+        paymentPage.enterUserPassword("Stefan666^^^");
         paymentPage.clickSubmitButton();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        assertThat(myAccountPage.getMyAccountUserText()).isEqualTo("user6781");
+        assertThat(myAccountPage.getMyAccountUserText()).isEqualTo("euookv");
     }
 
     @Test
@@ -183,6 +180,127 @@ public class PaymentPageTest extends PaymentForm {
         myAccountPage.enterLoginOrEmailToLostPasswordUserField("user78@nazwa.pl");
         myAccountPage.clickResetPasswordSubmitButton();
         assertThat(myAccountPage.getResetPasswordSuccessSendAlert()).isEqualTo("E-mail z linkiem do zresetowania hasła został wysłany na adres przypisany do twojego konta, może minąć kilka minut zanim pojawi się on w twojej skrzynce. Proszę poczekaj co najmniej 10 minut przed ponowną próbą resetu hasła.");
+    }
+
+    @Test
+    public void shouldSelectBankTransferAsPaymentMethod(){
+        ShopPage shopPage = homePage.selectShopCategory("Kobieta");
+        shopPage.addProductsToBasket("Anchor Bracelet");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        OrderPage orderPage = paymentPage.paymentAccept();
+        String orderNumber = orderPage.getOrderNumber();
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.clickLastOrdersButton();
+        String orderListLastOrder = myAccountPage.getOrderListLastOrder();
+        assertTrue(orderNumber.equals(orderListLastOrder));
+    }
+
+    @Test
+    public void shouldSelectPayUAsPaymentMethodAndRefreshToCheckIfPaymentMethodChange(){
+        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
+        shopPage.addProductsToBasket("Bright Purse With Chain");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("payu");
+        webDriver.navigate().refresh();
+        assertThat(paymentPage.checkIfPayURadioButtonIsSelected());
+
+    }
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodAndMakePurchase() {
+        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
+        shopPage.addProductsToBasket("Bright Purse With Chain");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("stripe");
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.findElementInFrame("4242424242424242", "0623", "999");
+        OrderPage orderPage = paymentPage.paymentAccept();
+        String orderNumber = orderPage.getOrderNumber();
+        assertThat(orderNumber).isNotNull();
+
+    }
+        @Test
+        public void shouldSelectStripeAsPaymentMethodAndMakePurchaseWithoutAcceptingTerms() {
+            ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
+            shopPage.addProductsToBasket("Bright Purse With Chain");
+            ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+            PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+            logInOnPaymentPageAsRegisteredUser(paymentPage);
+            paymentPage.choosePaymentMethod("stripe");
+            paymentPage.clickNewUPaymentMethodRadioButton();
+            paymentPage.findElementInFrame("4242424242424242", "0623", "999");
+            paymentPage.paymentAccept();
+            new PaymentPage(webDriver);
+            assertThat(paymentPage.getUnableToProcessOrderAlertText().contains("Proszę przeczytać i zaakceptować regulamin sklepu aby móc sfinalizować zamówienie."));
+        }
+
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodWithIncorrectCardDate() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket("Anchor Bracelet");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("stripe");
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.findElementInFrame("4000000000000127", "0600", "875");
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.paymentAccept();
+        assertThat(paymentPage.getStipeCardValidityErrorText().contains("Rok ważności karty upłynął w przeszłości"));
+    }
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodWithIncorrectCVC() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket("Anchor Bracelet");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("stripe");
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.findElementInFrame("4000000000000119", "0670", "99");
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.paymentAccept();
+        assertThat(paymentPage.getStipeCardValidityErrorText().contains("Kod bezpieczeństwa karty jest niekompletny."));
+    }
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodWithExpiredCard() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket("Anchor Bracelet");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("stripe");
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.findElementInFrame("4000000000000069", "0627", "999");
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.paymentAccept();
+        assertThat(paymentPage.getUnableToProcessOrderAlertText().contains("Karta wygasła."));
+    }
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodWithIncorrectCardNumber() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket("Anchor Bracelet");
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        logInOnPaymentPageAsRegisteredUser(paymentPage);
+        paymentPage.choosePaymentMethod("stripe");
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.findElementInFrame("4242424242424241", "0627", "999");
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.paymentAccept();
+        assertThat(paymentPage.getStipeCardValidityErrorText().contains("Numer karty nie jest prawidłowym numerem karty kredytowej."));
     }
 
 

@@ -25,9 +25,9 @@ public class ContactPageTest extends MyProperties {
     }
 
     @AfterEach
-    public void destroy() {
-        webDriver.close();
-    }
+//    public void destroy() {
+//        webDriver.close();
+//    }
 
     @Test
     public void shouldFillInAndSendForm() {
@@ -40,6 +40,7 @@ public class ContactPageTest extends MyProperties {
         contactPage.clickSendMessageButton();
         assertTrue(contactPage.isContactMessageDisplayed());
     }
+
 
     @Test
     public void shouldSendEmptyForm() {
@@ -59,7 +60,7 @@ public class ContactPageTest extends MyProperties {
         contactPage.enterEmailAddress("rirobim664lefaqr5.com");
         contactPage.enterMessage("Lorem ipsum dolor sit amet, consectetur adipiscing el");
         contactPage.clickSendMessageButton();
-        assertThat(contactPage.isEmailValidationErrorDisplayed()).isTrue();
+        assertTrue(contactPage.isEmailValidationErrorDisplayed());
     }
 
 }

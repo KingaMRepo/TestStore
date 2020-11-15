@@ -8,16 +8,16 @@ import java.util.Properties;
 public class MyProperties {
     protected Properties properties = new Properties();
 
-    {
+  {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("config.properties");
         if (resourceAsStream != null) {
             try {
-                properties.load(InputStream.nullInputStream());
+               properties.load(resourceAsStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("File not found exeption");
+            System.out.println("File not found exception");
         }
         System.out.println("");
     }

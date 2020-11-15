@@ -6,6 +6,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChangePasswordPage extends Menu {
 
     @FindBy(css="#account_display_name+span>em")
@@ -28,6 +31,12 @@ public class ChangePasswordPage extends Menu {
     private WebElement submitButton;
     @FindBy(css="div.woocommerce-message")
     private WebElement alert;
+    @FindBy(css="div.elementor-widget-container>div>p")
+    private WebElement myAccountWelcomeAlert;
+    @FindBy(css=".woocommerce-error>li")
+    private List<WebElement> errors;
+
+
 
 
     public ChangePasswordPage(WebDriver driver) {
@@ -40,19 +49,37 @@ public class ChangePasswordPage extends Menu {
         accountFirstName.sendKeys(name);
     }
 
+    public void clearAccountFirstName() {
+        accountFirstName.clear();
+    }
+
     public void enterAccountLastName(String lastName) {
         accountLastName.clear();
         accountLastName.sendKeys(lastName);
     }
 
-    public void enterAccountDisplayName(String displayName) {
+    public void clearAccountLastName() {
         accountLastName.clear();
-        accountLastName.sendKeys(displayName);
     }
+
+
+    public void enterAccountDisplayName(String displayName) {
+        accountDisplayName.clear();
+        accountDisplayName.sendKeys(displayName);
+    }
+
+    public void clearAccountDisplayName() {
+        accountDisplayName.clear();
+    }
+
 
     public void enterAccountEmail(String email) {
         accountEmail.clear();
         accountEmail.sendKeys(email);
+    }
+
+    public void clearAccountEmail() {
+        accountEmail.clear();
     }
 
     public void enterCurrentPassword(String password) {
@@ -71,9 +98,6 @@ public class ChangePasswordPage extends Menu {
     }
 
     public MyAccountPage submitPassword(){
-        //Actions actions = new Actions(webDriver);
-        //actions.moveToElement(submitButton).build().perform();
-        //wait.until(ExpectedConditions.elementToBeClickable(submitButton));
         submitButton.click();
         return new MyAccountPage(webDriver);
     }
@@ -85,6 +109,19 @@ public class ChangePasswordPage extends Menu {
     public Boolean isAlertDisplayed(){
         return alert.isDisplayed();
     }
+
+    public Boolean isMyAccountWelcomeTextDisplayed(){
+        return myAccountWelcomeAlert.isDisplayed();
+    }
+
+    public List<String> getErrorLabels(){
+        List<String>labels = new ArrayList<>();
+        for (int i = 0; i <errors.size(); i++) {
+            labels.add(errors.get(i).getText());
+        }
+        return labels;
+    }
+
 
 
 }

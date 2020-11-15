@@ -1,16 +1,19 @@
 package pl.me.automation.page;
 
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 public class PaymentPage extends Menu {
 
     @FindBy(css = "div.woocommerce-billing-fields>h3")
@@ -97,12 +100,38 @@ public class PaymentPage extends Menu {
     private List<WebElement> errors;
     @FindBy(css = ".woocommerce-error>li>strong")
     private WebElement formValidationError;
-    @FindBy(css=".lost_password>a")
+    @FindBy(css = ".lost_password>a")
     private WebElement lostPasswordButton;
+    @FindBy(className = "input-radio")
+    private List<WebElement> paymentMethods;
+    @FindBy(id = "payment_method_payu")
+    private WebElement payUPayment;
+    @FindBy(css = "input#wc-stripe-payment-token-new")
+    private WebElement newUPaymentMethodRadioButton;
+    @FindBy(css = ".InputContainer> input")
+    private WebElement payURadioButton;
+    @FindBy(css = "div.CardNumberField-input-wrapper>.InputContainer>input")
+    private WebElement cardNumberField;
+    @FindBy(css = "div#stripe-card-element>div>iframe")
+    private WebElement stripePaymentBox;
+    @FindBy(css = ".InputContainer>[placeholder='Numer karty']")
+    private WebElement stripeCardNumberInput;
+    @FindBy(id = "payment_method_payu")
+    private WebElement payUPaymentMethod;
+    @FindBy(css = "ul.woocommerce-error>li")
+    private WebElement unableToProcessOrderAlert;
+    @FindBy(css = "[class*='woocommerce-NoticeGroup']")
+    private WebElement unableToProcessOrderAlertField;
+    @FindBy(css = ".stripe-source-errors>ul>li")
+    private WebElement stipeCardValidityError;
+    @FindBy(css = ".stripe-source-errors>ul")
+    private WebElement stipeErrorField;
 
 
 
-    private Object driver;
+
+
+
 
     public PaymentPage(WebDriver driver) {
         super(driver);
@@ -170,10 +199,6 @@ public class PaymentPage extends Menu {
     }
 
 
-    public Boolean isBillingRegistrationError() {
-        return billingRegistrationError.isDisplayed();
-    }
-
     public void acceptTermsAndConditionsCheckbox() {
         wait.until(ExpectedConditions.elementToBeClickable(termsAndConditionsCheckbox));
         Actions actions = new Actions(webDriver);
@@ -181,13 +206,13 @@ public class PaymentPage extends Menu {
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
+            Thread.currentThread().interrupt();
         }
         termsAndConditionsCheckbox.click();
     }
 
     public OrderPage paymentAccept() {
-        //wait.until(ExpectedConditions.elementToBeClickable(paymentSubmitButton));
         paymentSubmitButton.click();
         return new OrderPage(webDriver);
     }
@@ -201,14 +226,16 @@ public class PaymentPage extends Menu {
         return paymentFormEmailError.isDisplayed();
     }
 
+
+
     public String getShippingMethodRate() {
         wait.until(ExpectedConditions.visibilityOf(shippingRate));
         return shippingRate.getText();
     }
 
-    public void addCouponCode(String couponCode) {
+    public void applyCouponCode(String couponCode) {
         clickToAddCouponButton.click();
-        wait.until(ExpectedConditions.elementToBeClickable(couponCodeInput));
+        wait.until(ExpectedConditions.elementToBeClickable(applyCouponButton));
         couponCodeInput.clear();
         couponCodeInput.sendKeys(couponCode);
         applyCouponButton.click();
@@ -277,10 +304,10 @@ public class PaymentPage extends Menu {
     }
 
 
-    public MyAccountPage enterUserNameOrEmail(String username) {
+    public void enterUserNameOrEmail(String userName) {
+        wait.until(ExpectedConditions.visibilityOf(userNameOrEmailField));
         userNameOrEmailField.clear();
-        userNameOrEmailField.sendKeys(username);
-        return new MyAccountPage(webDriver);
+        userNameOrEmailField.sendKeys(userName);
     }
 
     public void enterUserPassword(String userPassword) {
@@ -304,11 +331,15 @@ public class PaymentPage extends Menu {
     }
 
     public List<String> getErrorLabels() {
-        List<String> labels = new ArrayList<>();
-        for (int i = 0; i < errors.size(); i++) {
-            labels.add(errors.get(i).getText());
-        }
-        return labels;
+//        List<String> labels = new ArrayList<>();
+//        for (int i = 0; i < errors.size(); i++) {
+//            labels.add(errors.get(i).getText());
+//        }
+//        return labels;
+        return errors.stream()
+                .map(price -> price.getText())
+                .collect(Collectors.toList());
+
     }
 
     public String getFormValidationErrorText() {
@@ -322,16 +353,51 @@ public class PaymentPage extends Menu {
         return new MyAccountPage(webDriver);
     }
 
-    public void refreshPage(){
-        wait.until(ExpectedConditions.textToBePresentInElement(h1Header, "Zamówienie"));
-        webDriver.navigate().refresh();
+    public PaymentPage choosePaymentMethod(String paymentMethod) {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(payUPayment).build().perform();
+
+        WebElement selectedPaymentMethod = null;
+        for (int i = 0; i < paymentMethods.size(); i++) {
+            if (paymentMethods.get(i).getAttribute("value").equals(paymentMethod)) {
+                selectedPaymentMethod = paymentMethods.get(i);
+            }
+        }
+        if (selectedPaymentMethod != null) {
+            selectedPaymentMethod.click();
+        }
+
+        return new PaymentPage(webDriver);
+    }
+
+    public void clickNewUPaymentMethodRadioButton() {
+        Actions actions = new Actions(webDriver);
+        wait.until(ExpectedConditions.visibilityOf(newUPaymentMethodRadioButton));
+        actions.moveToElement(newUPaymentMethodRadioButton).click().build().perform();
 
     }
 
+    public void findElementInFrame(String cardNumber, String date, String CVCNumber) {
+        webDriver.switchTo().defaultContent();
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(stripePaymentBox));
+        wait.until(ExpectedConditions.elementToBeClickable(stripeCardNumberInput));
+        stripeCardNumberInput.sendKeys(cardNumber, date, CVCNumber);
+        webDriver.switchTo().defaultContent();
+    }
 
+    public Boolean checkIfPayURadioButtonIsSelected() {
+        return payUPaymentMethod.isSelected();
+    }
 
+    public String getUnableToProcessOrderAlertText() {
+        wait.until(ExpectedConditions.visibilityOf(unableToProcessOrderAlertField));
+        return unableToProcessOrderAlert.getText();
+    }
 
-
+    public String getStipeCardValidityErrorText() {
+        wait.until(ExpectedConditions.visibilityOf(stipeErrorField));
+        return stipeCardValidityError.getText();
+    }
 
 
 }

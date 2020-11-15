@@ -15,6 +15,8 @@ public class SearchResultsPage extends Menu {
     private WebElement searchResultAlert;
     @FindBy(css="div[class~='post-thumb-img-content']>a")
     private WebElement searchResultImage;
+    @FindBy(css = "#woocommerce-product-search-field-0+button")
+    private WebElement searchResultButton;
 
     public SearchResultsPage(WebDriver driver) {
         super(driver);
@@ -30,6 +32,11 @@ public class SearchResultsPage extends Menu {
     public SingleProductPage displayProductPhoto() {
         searchResultImage.click();
         return new SingleProductPage(webDriver);
+    }
+
+    public ShopPage clickSearchResultButton() {
+        searchResultButton.click();
+        return new ShopPage(webDriver);
     }
 
 }

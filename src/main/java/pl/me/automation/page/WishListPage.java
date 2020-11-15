@@ -22,6 +22,11 @@ public class WishListPage extends Menu {
     private List<WebElement> productRemoveButtons;
     @FindBy(css="div.woocommerce-message ")
     private WebElement removeAlert;
+    @FindBy(css = ".product-name>a")
+    private WebElement wishListProduct;
+
+
+
 
     private Map<String, WebElement>wishListRemoveProducts = new HashMap<>();
 
@@ -50,6 +55,11 @@ public class WishListPage extends Menu {
     public Boolean isRemoveAlertDisplay(){
         wait.until(ExpectedConditions.elementToBeClickable(header));
         return removeAlert.isDisplayed();
+    }
+
+    public String getWishListProductName() {
+        return wishListProduct.getText();
+
     }
 }
 

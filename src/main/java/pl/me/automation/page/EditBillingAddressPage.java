@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditAddressPage extends Menu {
+public class EditBillingAddressPage extends Menu {
     @FindBy(tagName = "h3")
     private WebElement header;
     @FindBy(id = "billing_first_name")
@@ -43,7 +43,7 @@ public class EditAddressPage extends Menu {
     @FindBy(css=".woocommerce-error>li")
     private List<WebElement>errors;
 
-    public EditAddressPage(WebDriver driver)
+    public EditBillingAddressPage(WebDriver driver)
     {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(header, "Adres rozliczeniowy"));
@@ -68,11 +68,6 @@ public class EditAddressPage extends Menu {
     }
 
 
-    public void enterOptionalBillingCountry(String billingCountry) {
-        companyInput.clear();
-        companyInput.sendKeys(billingCountry);
-    }
-
     public void selectBillingCountryName(String value){
         Select select = new Select(countrySelect);
         select.selectByVisibleText(value);
@@ -87,10 +82,6 @@ public class EditAddressPage extends Menu {
         address1Input.clear();
     }
 
-    public void enterBillingAddress2(String billingAddress2) {
-        address2Input.clear();
-        address2Input.sendKeys(billingAddress2);
-    }
 
     public void enterBillingCity(String billingCity) {
         cityInput.clear();

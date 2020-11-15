@@ -11,13 +11,12 @@ public class OrderPage extends Menu {
 
     @FindBy(tagName = "h1")
     public WebElement h1Header;
-    @FindBy(css=".woocommerce-order>p")
+    @FindBy(css = ".woocommerce-order>p")
     public WebElement receivedOrderAlert;
-    @FindBy(css="li[class~=\"woocommerce-order-overview__order\"]>strong")
+    @FindBy(css = "li[class~= 'woocommerce-order-overview__order']>strong")
     public WebElement orderNumber;
-    @FindBy(css="h2+address")
-    public WebElement orderPaymentDetails;
-
+    @FindBy(css = "[class~='woocommerce-table__product-name']>a")
+    private WebElement wishListProductName;
 
 
     public OrderPage(WebDriver driver) {
@@ -26,26 +25,25 @@ public class OrderPage extends Menu {
     }
 
 
-
-    public Boolean isReceivedOrderAlertDisplayed(){
+    public Boolean isReceivedOrderAlertDisplayed() {
         wait.until(ExpectedConditions.visibilityOf(receivedOrderAlert));
         return receivedOrderAlert.isDisplayed();
     }
 
-    public String getOrderNumber(){
+    public String getOrderNumber() {
         wait.until(ExpectedConditions.visibilityOf(orderNumber));
         return orderNumber.getText();
     }
 
-    public String getOrderPaymentDetails(){
-        wait.until(ExpectedConditions.visibilityOf(orderPaymentDetails));
-        return orderPaymentDetails.getText();
-    }
 
-    public Boolean isOrderAcceptMessageIsDisplay(){
+    public Boolean isOrderAcceptMessageIsDisplay() {
         wait.until(ExpectedConditions.textToBePresentInElement(receivedOrderAlert, "Dziękujemy. Otrzymaliśmy Twoje zamówienie."));
         return receivedOrderAlert.isDisplayed();
     }
 
+    public String getWishListProductName() {
+        wait.until(ExpectedConditions.visibilityOf(orderNumber));
+        return wishListProductName.getText();
+    }
 
 }

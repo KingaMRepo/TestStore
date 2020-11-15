@@ -38,6 +38,8 @@ public class MyAccountPage extends Menu {
     private WebElement addressAndBillingButton;
     @FindBy(xpath = ".//a[contains(@href, 'rozliczeniowy')]")
     private WebElement addressAndBillingEditButton;
+    @FindBy(xpath = ".//a[contains(@href, 'przesylki')]")
+    private WebElement shippingAddressEditButton;
     @FindBy(css = ".woocommerce-MyAccount-content>p>a")
     private WebElement logoutFromMyAccountButton;
     @FindBy(css = "div[class='woocommerce-notices-wrapper']+p>strong")
@@ -48,28 +50,35 @@ public class MyAccountPage extends Menu {
     private WebElement userNameText;
     @FindBy(css = "p[class~='woocommerce-LostPassword']>a")
     private WebElement lostPasswordReminder;
-    @FindBy(css=".woocommerce-MyAccount-content>p+p>a")
+    @FindBy(css= ".woocommerce-MyAccount-content>p+p>a")
     private WebElement orderListButton;
-    @FindBy(css="[class~='woocommerce-orders-table__cell']>a" )
+    @FindBy(css= "[class~='woocommerce-orders-table__cell']>a" )
     private WebElement orderListLastOrder;
-    @FindBy(css="[class~='woocommerce-MyAccount-content']>p+p>a+a")
+    @FindBy(css= "[class~='woocommerce-MyAccount-content']>p+p>a+a")
     private WebElement paymentAndDeliveryAddressesButton;
-    @FindBy(css="[class='woocommerce-column__title']+address")
+    @FindBy(css= "[class='woocommerce-column__title']+address")
     private WebElement paymentAddress;
     @FindBy(css="[class='woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions']>a")
     private List<WebElement> showOrderDetailsButtons;
-    @FindBy(css=".woocommerce-notices-wrapper+p")
+    @FindBy(css= ".woocommerce-notices-wrapper+p")
     private WebElement paymentAndDeliveryAddressesMessage;
-    @FindBy(css=".woocommerce-MyAccount-content>div+p+p>a:last-child")
+    @FindBy(css= ".woocommerce-MyAccount-content>div+p+p>a:last-child")
     private WebElement changePasswordAndAccountDetailsButton;
-    @FindBy(css="[name='wc_reset_password']+button")
+    @FindBy(css= "[name='wc_reset_password']+button")
     private WebElement resetPasswordSubmitButton;
-    @FindBy(id ="user_login")
+    @FindBy(id = "user_login")
     private WebElement lostPasswordUserLogin;
-    @FindBy(css=".woocommerce-message+p")
+    @FindBy(css= ".woocommerce-message+p")
     private WebElement resetPasswordSuccessSendAlert;
-    @FindBy(css=".woocommerce-MyAccount-content>p+p")
+    @FindBy(css= ".woocommerce-MyAccount-content>p+p")
     private WebElement welcomeToMyAccountText;
+    @FindBy(css = ".woocommerce-notices-wrapper+p>a")
+    private WebElement logOutButton;
+    @FindBy(css = ".woocommerce-MyAccount-content>div>ul")
+    private WebElement changePasswordAndAccountDetailsErrors;
+
+
+
 
 
     public MyAccountPage(WebDriver driver) {
@@ -93,17 +102,14 @@ public class MyAccountPage extends Menu {
     }
 
     public LoggedInUserPage clickRegister() {
-        //wait.until(ExpectedConditions.elementToBeClickable(registerButton));
         registerButton.click();
         return new LoggedInUserPage(webDriver);
     }
 
     public MyAccountPage clickRegisterFalse() {
-        //wait.until(ExpectedConditions.elementToBeClickable(registerButton));
         registerButton.click();
         return new MyAccountPage(webDriver);
     }
-
 
     public void enterLoginUserNameOrEmail(String nameOrEmail) {
         wait.until(ExpectedConditions.elementToBeClickable(userNameOrEmailInput));
@@ -133,6 +139,10 @@ public class MyAccountPage extends Menu {
         return new MyAccountPage(webDriver);
     }
 
+    public String getRegistrationAndLoginErrorText() {
+        wait.until(ExpectedConditions.visibilityOf(errorAlert));
+        return errorAlert.getText();
+    }
     public Boolean isRegistrationAndLoginErrorDisplayed() {
         wait.until(ExpectedConditions.visibilityOf(errorAlert));
         return errorAlert.isDisplayed();
@@ -147,10 +157,6 @@ public class MyAccountPage extends Menu {
         return new MyAccountPage(webDriver);
     }
 
-    public MyAccountPage logoutFromMyAccount() {
-        logoutFromMyAccountButton.click();
-        return new MyAccountPage(webDriver);
-    }
 
     public String getMyAccountUserText() {
         return myAccountUserText.getText();
@@ -158,6 +164,7 @@ public class MyAccountPage extends Menu {
 
     public String getUserNameText() {
         return userNameText.getText();
+
     }
 
     public Boolean isUserNameTextDisplayed() {
@@ -169,7 +176,7 @@ public class MyAccountPage extends Menu {
         return new LostPasswordReminderPage(webDriver);
     }
 
-    public void goToOrdersList(){
+    public void clickLastOrdersButton(){
         wait.until(ExpectedConditions.elementToBeClickable(orderListButton));
         orderListButton.click();
     }
@@ -201,10 +208,16 @@ public class MyAccountPage extends Menu {
         return new ChangePasswordPage(webDriver);
     }
 
-    public EditAddressPage clickEditAddressAndBillingEditButton(){
+    public EditBillingAddressPage clickEditAddressAndBillingEditButton(){
         addressAndBillingEditButton.click();
-        return new EditAddressPage(webDriver);
+        return new EditBillingAddressPage(webDriver);
     }
+
+    public EditShippingAddressPage clickEditShippingAddressEditButtonButton(){
+        shippingAddressEditButton.click();
+        return new EditShippingAddressPage(webDriver);
+    }
+
 
     public void enterLoginOrEmailToLostPasswordUserField(String user) {
         lostPasswordUserLogin.clear();
@@ -222,7 +235,17 @@ public class MyAccountPage extends Menu {
 
    public Boolean isWelcomeToMyAccountTextDisplay(){
        return welcomeToMyAccountText.isDisplayed();
-
    }
+
+   public MyAccountPage logOutFromMyAccountPage(){
+       logOutButton.click();
+       return new MyAccountPage(webDriver);
+   }
+
+    public Boolean isChangePasswordAndAccountDetailsErrorsDisplay(){
+        return changePasswordAndAccountDetailsErrors.isDisplayed();
+
+    }
+
 
 }

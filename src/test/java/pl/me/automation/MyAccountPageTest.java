@@ -8,11 +8,11 @@ import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MyAccountPageTest extends MyAccountLogInForm {
+public class MyAccountPageTest extends Forms {
     private WebDriver webDriver;
     private HomePage homePage;
 
@@ -37,45 +37,46 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         myAccountPage.enterRegisterUserEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
         myAccountPage.enterRegisterUserPassword("Qwer123!@#&*");
         myAccountPage.clickRegister();
-        assertThat(myAccountPage.isWelcomeToMyAccountTextDisplay());
+        assertTrue(myAccountPage.isWelcomeToMyAccountTextDisplay());
     }
 
-    @Test
-    public void shouldIncorrectlyRegisterUserName() {
-        LocalDateTime now = LocalDateTime.now();
-        MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterRegisterUserName("");
-        myAccountPage.enterRegisterUserEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
-        myAccountPage.enterRegisterUserPassword("Qwer123!@#&*");
-        myAccountPage.clickRegisterFalse();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
-    }
 
     @Test
-    public void shouldRegisterUserWithIncorrectEmail() {
+    public void shouldRegisterUserWithEmptyEmail() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.enterRegisterUserName("Wert" + now.toString().replaceAll(":", "-"));
         myAccountPage.enterRegisterUserEmail("");
         myAccountPage.enterRegisterUserPassword("Qwer123!@#&*");
         myAccountPage.clickRegisterFalse();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Podaj poprawny adres e-mail."));
+    }
+
+
+    @Test
+    public void shouldRegisterUserWithEmptyName() {
+        LocalDateTime now = LocalDateTime.now();
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.enterRegisterUserName("");
+        myAccountPage.enterRegisterUserEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
+        myAccountPage.enterRegisterUserPassword("Qwer123!@#&*");
+        myAccountPage.clickRegisterFalse();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Proszę wpisać prawidłową nazwę użytkownika."));
     }
 
     @Test
-    public void shouldIncorrectlyRegisterUserPassword() {
+    public void shouldRegisterUserWithEmptyPassword() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterRegisterUserName("wert");
+        myAccountPage.enterRegisterUserName("wert" + now.toString().replaceAll(":", "-"));
         myAccountPage.enterRegisterUserEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
         myAccountPage.enterRegisterUserPassword("");
         myAccountPage.clickRegisterFalse();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Proszę wpisać hasło."));
     }
 
     @Test
     public void shouldLoginWithEmptyRegistrationForm() {
-        LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.clickRegisterFalse();
         assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
@@ -84,34 +85,67 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldCorrectlyLoginAsUser() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
-        assertThat(myAccountPage.getUserNameText().contains("user134"));
+        fillLoginAsAdminForm(myAccountPage);
+        assertThat(myAccountPage.getUserNameText().contains("admin"));
     }
 
+
     @Test
-    public void shouldLoginWithIncorrectUserNameOrEmail() {
+    public void shouldLoginWithIncorrectUserName() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterLoginUserNameOrEmail("user00@nazwa.pl");
+        myAccountPage.enterRegisterUserName("1&$" + now.toString().replaceAll(":", "-"));
+        myAccountPage.enterLoginUserNameOrEmail("Wert" + now.toString().replaceAll(":", "-") + "@onet.pl");
         myAccountPage.enterLoginUserLoginPassword("x6Z7Vr%zh3N?HvD");
         myAccountPage.clickLoginSubmit();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Incorrect username or password"));
     }
 
     @Test
     public void shouldLoginWithIncorrectUserPassword() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.enterLoginUserNameOrEmail("user134@nazwa.pl");
-        myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&");
+        myAccountPage.enterLoginUserLoginPassword("9/[}JX7v]Y1m5&");
         myAccountPage.clickLoginSubmit();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Incorrect username or password"));
     }
+
+
+    @Test
+    public void shouldLoginWithIncorrectUserEmail() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.enterLoginUserNameOrEmail("#@%^%#$@#$@#.com");
+        myAccountPage.enterLoginUserLoginPassword("x6Z7Vr%zh3N?HvD");
+        myAccountPage.clickLoginSubmit();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Incorrect username or password"));
+    }
+
 
     @Test
     public void shouldLoginWithEmptyLoginForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.clickLoginSubmit();
-        assertThat(myAccountPage.isRegistrationAndLoginErrorDisplayed()).isTrue();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().contains("Nazwa użytkownika jest wymagana."));
+    }
+
+    @Test
+    public void shouldLoginWithEmptyUserNameOrEmail() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.enterLoginUserNameOrEmail(" ");
+        myAccountPage.enterLoginUserLoginPassword("x6Z7Vr%zh3N?HvD");
+        myAccountPage.clickLoginSubmit();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Nazwa użytkownika jest wymagana."));
+
+    }
+
+
+    @Test
+    public void shouldLoginWithEmptyUserPassword() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.enterLoginUserNameOrEmail("Test01@nazwa.com ");
+        myAccountPage.enterLoginUserLoginPassword(" ");
+        myAccountPage.clickLoginSubmit();
+        assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals("Incorrect username or password"));
     }
 
     @Test
@@ -121,10 +155,11 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         myAccountPage.enterLoginUserLoginPassword("9[}JX7v]Y1m5&");
         myAccountPage.clickLoginSubmit();
         LostPasswordReminderPage lostPasswordReminderPage = myAccountPage.clickLostPasswordReminderButton();
-        lostPasswordReminderPage.insertUserLoginOrEmail("user134@nazwa.pl");
+        lostPasswordReminderPage.insertUserLoginOrEmail("Test01@nazwa.com");
         lostPasswordReminderPage.clickResetPasswordButton();
         assertThat(lostPasswordReminderPage.getResetPasswordText()).isEqualTo(lostPasswordReminderPage.resetText);
     }
+
 
     @Test
     public void shouldCorrectlyLoginAsUserWithRememberMeCheckbox() {
@@ -136,7 +171,7 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldCorrectlyLoginAsUserAndBackToHomePage() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
+        fillLoginAsAdminForm(myAccountPage);
         String userName = myAccountPage.getUserNameText();
         myAccountPage.clickHome();
         myAccountPage.clickMyAccount();
@@ -151,41 +186,24 @@ public class MyAccountPageTest extends MyAccountLogInForm {
         shopPage.addProductsToBasket("Basic Blue Jeans");
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        LocalDateTime now = LocalDateTime.now();
-        paymentPage.enterBillingUserName("rafałł");
-        paymentPage.enterBillingUserLastName("kwiatkowski");
-        paymentPage.selectBillingCountry(1);
-        paymentPage.enterBillingUserAddress("Kwiatowa");
-        paymentPage.enterBillingUserCity("Poznań");
-        paymentPage.enterBillingUserPostCode("60001");
-        paymentPage.enterBillingUserPhone("600500400");
-        paymentPage.enterBillingUserEmail("qwert!#11" + now.toString().replaceAll(":", "-") + "@nazwa.pl");
-        paymentPage.enterBillingAccountUsername("zxcvbn" + UUID.randomUUID().toString());
-        paymentPage.enterBillingAccountPassword("&%SIytrdf!90" + now.toString().replaceAll(":", "-"));
-        paymentPage.deselectShipToDifferentAddressCheckbox();
+        fillInPaymentForm(paymentPage);
         paymentPage.acceptTermsAndConditionsCheckbox();
         OrderPage orderPage = paymentPage.paymentAccept();
         String orderNumber = orderPage.getOrderNumber();
         MyAccountPage myAccountPage = paymentPage.clickMyAccount();
-        myAccountPage.goToOrdersList();
+        myAccountPage.clickLastOrdersButton();
         String lastOrder = myAccountPage.getOrderListLastOrder();
         assertThat(orderNumber).isEqualTo(lastOrder);
     }
 
+
     @Test
     public void shouldEditAndCorrectlyFillInBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
+        fillLoginAsAdminForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
-        EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
-        editAddressPage.enterBillingUserName("Aglaea");
-        editAddressPage.enterBillingUserLastName("Preethi");
-        editAddressPage.selectBillingCountryName("Albania");
-        editAddressPage.enterBillingAddress1("Sun Alley");
-        editAddressPage.enterBillingPostCode("30404");
-        editAddressPage.enterBillingCity("Wlora");
-        editAddressPage.enterBillingRegion("Delvina");
-        editAddressPage.enterBillingPhoneNumber("111222333");
+        EditBillingAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
+        changeCorrectlyBillingAddress(editAddressPage);
         editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.isEditBillingAddressAlertDisplayed()).isTrue();
     }
@@ -193,17 +211,10 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldEditAndIncorrectlyFillInBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
+        fillLoginAsAdminForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
-        EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
-        editAddressPage.enterBillingUserName("");
-        editAddressPage.enterBillingUserLastName("Preethi");
-        editAddressPage.selectBillingCountryName("Albania");
-        editAddressPage.enterBillingAddress1("Sun Alley");
-        editAddressPage.enterBillingPostCode("");
-        editAddressPage.enterBillingCity("Wlora");
-        editAddressPage.enterBillingRegion("Delvina");
-        editAddressPage.enterBillingPhoneNumber("$!");
+        EditBillingAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
+        changeIncorrectlyBillingAddress(editAddressPage);
         editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.getErrorLabels()).containsExactly("Imię jest wymaganym polem.", "Kod pocztowy jest wymaganym polem.", "Telefon nie jest poprawnym numerem telefonu.");
     }
@@ -211,9 +222,9 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     @Test
     public void shouldEditAndSendEmptyBillingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
+        fillLoginAsAdminForm(myAccountPage);
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
-        EditAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
+        EditBillingAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.clearBillingUserName();
         editAddressPage.clearBillingUserLastName();
         editAddressPage.clearBillingAddress1();
@@ -226,21 +237,93 @@ public class MyAccountPageTest extends MyAccountLogInForm {
     }
 
     @Test
-    public void shouldCorrectlyFillInChangePasswordAndAccountDetailsForm(){
+    public void shouldEditAndCorrectlyFillInShippingAddressForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        fillLoginForm(myAccountPage);
+        fillLoginAsAdminForm(myAccountPage);
+        myAccountPage.clickPaymentAndDeliveryAddressesButton();
+        EditShippingAddressPage editShippingAddress = myAccountPage.clickEditShippingAddressEditButtonButton();
+        changeCorrectlyShippingAddress(editShippingAddress);
+        editShippingAddress.clickShippingSubmitButton();
+        assertThat(editShippingAddress.getShippingAddressFormAlert().contains("Adres został zmieniony."));
+    }
+
+
+    @Test
+    public void shouldEditAndIncorrectlyFillInShippingAddress() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        fillLoginAsAdminForm(myAccountPage);
+        myAccountPage.clickPaymentAndDeliveryAddressesButton();
+        EditShippingAddressPage editShippingAddress = myAccountPage.clickEditShippingAddressEditButtonButton();
+        changeIncorrectlyShippingAddress(editShippingAddress);
+        editShippingAddress.clickShippingSubmitButton();
+        assertTrue(editShippingAddress.isShippingAddressFormAlert());
+
+    }
+
+    @Test
+    public void shouldEditAndSendEmptyFillInShippingAddressForm() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        fillLoginAsAdminForm(myAccountPage);
+        myAccountPage.clickPaymentAndDeliveryAddressesButton();
+        EditShippingAddressPage editShippingAddress = myAccountPage.clickEditShippingAddressEditButtonButton();
+        editShippingAddress.clearShippingUserName();
+        editShippingAddress.clearShippingUserLastName();
+        editShippingAddress.clearShippingAddress1();
+        editShippingAddress.clearShippingPostcode();
+        editShippingAddress.clearShippingCity();
+        editShippingAddress.clickShippingSubmitButton();
+        assertThat(editShippingAddress.getErrorLabels()).containsExactly("Imię jest wymaganym polem.", "Nazwisko jest wymaganym polem.", "Ulica jest wymaganym polem.","Kod pocztowy jest wymaganym polem.","Miasto jest wymaganym polem.");
+
+    }
+
+    @Test
+    public void shouldCorrectlyFillInChangePasswordAndAccountDetailsForm() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        fillLoginAsUserForm(myAccountPage);
         ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
-        changePasswordPage.enterAccountFirstName("aaa");
-        changePasswordPage.enterAccountLastName("zzz");
-        changePasswordPage.enterAccountDisplayName("aaa");
-        changePasswordPage.enterAccountEmail("user199@nazwa.pl");
-        changePasswordPage.enterAccountDisplayName("aaa");
+        changePasswordPage.enterAccountFirstName("admin");
+        changePasswordPage.enterAccountLastName("admin");
+        changePasswordPage.enterAccountDisplayName("aaadmin");
+        changePasswordPage.enterAccountEmail("nazwa@nazwa.pl");
         changePasswordPage.enterCurrentPassword("");
         changePasswordPage.enterNewPassword("");
         changePasswordPage.acceptNewPassword("");
         changePasswordPage.submitPassword();
 
     }
+
+    @Test
+    public void shouldIncorrectlyFillInChangePasswordAndAccountDetailsForm() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        fillLoginAsUserForm(myAccountPage);
+        ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
+        changePasswordPage.enterAccountFirstName("admin");
+        changePasswordPage.enterAccountLastName("admin");
+        changePasswordPage.enterAccountDisplayName("aaadmin");
+        changePasswordPage.enterAccountEmail("nazwanazwa.pl");
+        changePasswordPage.enterAccountDisplayName("");
+        changePasswordPage.enterCurrentPassword("");
+        changePasswordPage.enterNewPassword("");
+        changePasswordPage.acceptNewPassword("");
+        changePasswordPage.submitPassword();
+        assertTrue(changePasswordPage.isMyAccountWelcomeTextDisplayed());
+
+    }
+
+    @Test
+    public void shouldSendEmptyFillInChangePasswordAndAccountDetailsForm() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        fillLoginAsUserForm(myAccountPage);
+        ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
+        changePasswordPage.clearAccountFirstName();
+        changePasswordPage.clearAccountLastName();
+        changePasswordPage.clearAccountDisplayName();
+        changePasswordPage.clearAccountEmail();
+        changePasswordPage.submitPassword();
+        assertThat(changePasswordPage.getErrorLabels()).containsExactly("Imię jest wymaganym polem.", "Nazwisko jest wymaganym polem.", "Nazwa wyświetlana jest wymaganym polem.", "Adres email jest wymaganym polem.");
+
+    }
+
 
 
 }

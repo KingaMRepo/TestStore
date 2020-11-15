@@ -59,10 +59,7 @@ public class ContactPage extends Menu {
     }
 
     public void enterMessage(String message){
-        //Actions actions = new Actions(webDriver);
-        //actions.moveToElement(userMessageInput).build().perform();
         userMessageInput.sendKeys(message);
-       //wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(userEmailInput));
     }
 
     public ContactPage sendMessage(){

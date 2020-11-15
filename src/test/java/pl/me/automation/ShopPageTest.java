@@ -40,7 +40,7 @@ public class ShopPageTest {
 
     @Test
     public void shouldFindProductByWritingIncorrectPhrase() {
-        ShopPage shopPage = homePage.clickShop();
+        ShopPage shopPage = homePage.selectShopCategory("Kobieta");
         SearchResultsPage searchResult = shopPage.findProduct("aaajeanns");
         assertThat(searchResult.isSearchResultsPageDisplayedShowingAlert()).isTrue();
     }
@@ -56,9 +56,11 @@ public class ShopPageTest {
     @Test
     public void shouldSortProductByItsPrice() {
         ShopPage shopPage = homePage.clickShop();
+        shopPage.sortProducts("Sortuj wg ceny: od najniższej");
         shopPage.sortProducts("Sortuj wg ceny: od najwyższej");
         assertThat(shopPage.getProductPrice()).isSortedAccordingTo(Comparator.reverseOrder());
     }
+
 
     @Test
     public void shouldGoFromSearchResultsToProductCardClickingOnProductSlidePhotoAndClose() {
@@ -77,39 +79,42 @@ public class ShopPageTest {
         shopPage.filterProductsByColour("Gray");
         shopPage.activeFiltersDeleteByName("30");
         List<String> filterLabels = shopPage.getFilterLabels();
-        assertThat(filterLabels).containsExactly("Gray","XL");
+        assertThat(filterLabels).containsExactly("Gray", "XL");
+    }
+
+
+    @Test
+    public void shouldFilterPriceUsingDragAndDropSlider() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.dragAndDropPriceFilter();
+        assertThat(shopPage.getDragAndDropSliderMinValue().equals(shopPage.getDragAndDropSliderMinFilter()));
+        assertThat(shopPage.getDragAndDropSliderMaxValue().equals(shopPage.getDragAndDropSliderMaxFilter()));
+
     }
 
     @Test
-    public void shouldCheckIfPendingShoppingCardSumsUpWithNewAdded() {
+    public void shouldFilterProductBySize() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Black Jacket");
-        shopPage.addProductsToBasket("Basic Blue Jeans");
-        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        Double totalPrice = shoppingCardPage.getShoppingCardTotalPrice();
-        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        paymentPage.enterBillingUserName("marek");
-        paymentPage.enterBillingUserLastName("nowak");
-        paymentPage.selectBillingCountry(1);
-        paymentPage.enterBillingUserAddress("Kwiatowa");
-        paymentPage.enterBillingUserCity("Poznań");
-        paymentPage.enterBillingUserPostCode("60001");
-        paymentPage.enterBillingUserPhone("600500400");
-        paymentPage.enterBillingUserEmail("qwertt!#12@nazwa.pl");
-        paymentPage.enterBillingAccountUsername("kinga");
-        paymentPage.enterBillingAccountPassword("&%SIytrdf!90");
-        paymentPage.deselectShipToDifferentAddressCheckbox();
-        paymentPage.acceptTermsAndConditionsCheckbox();
-        shopPage = paymentPage.clickShop();
-        shopPage.addProductsToBasket("Black Jacket");
-        Double productPrice = shopPage.getProductPrice("Black Jacket");
-        shoppingCardPage = shopPage.clickBasket();
-        assertThat(totalPrice + productPrice).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice());
+        shopPage.filterProductsBySize("36");
+        shopPage.filterProductsBySize("34");
+        shopPage.activeFiltersDeleteByName("36");
+        List<String> filterLabels = shopPage.getFilterLabels();
+        assertThat(filterLabels).containsExactly("34");
+
     }
 
+    @Test
+    public void shouldFilterProductByColour() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.filterProductsByColour("Blue");
+        shopPage.activeFiltersDeleteByName("Blue");
+        List<String> filterLabels = shopPage.getFilterLabels();
+        assertThat(filterLabels).containsExactly();
+
+    }
+
+
 }
-
-
 
 
 

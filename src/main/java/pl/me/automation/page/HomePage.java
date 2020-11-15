@@ -43,18 +43,18 @@ public class HomePage extends Menu {
     private WebElement cookieNoticeContainer;
     @FindBy(css = ".astra-shop-summary-wrap>.star-rating+a")
     private List<WebElement> recommendedProducts;
-    @FindBy(css=".astra-shop-summary-wrap>a>h2")
+    @FindBy(css = ".astra-shop-summary-wrap>a>h2")
     private List<WebElement> recommendedProductsNames;
 
 
     private Map<String, Product> products = new HashMap<>();
-    private List<Product>productsInBasket = new ArrayList<>();
+    private List<Product> productsInBasket = new ArrayList<>();
 
 
     public HomePage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.visibilityOf(buyButton));
-        for (int i = 0; i <recommendedProductsNames.size(); i++) {
+        for (int i = 0; i < recommendedProductsNames.size(); i++) {
             products.put(recommendedProductsNames.get(i).getText(), new Product(recommendedProducts.get(i), null, 0, recommendedProductsNames.get(i).getText()));
         }
     }
@@ -68,14 +68,6 @@ public class HomePage extends Menu {
         }
     }
 
-    public ShoppingCardPage addProductToCardAndGoToShoppingCard() {
-        addToShoppingCardButton.click();
-        wait.until(ExpectedConditions.visibilityOf(checkShoppingCardButton));
-        checkShoppingCardButton.click();
-        return new ShoppingCardPage(webDriver);
-    }
-
-
     public void addProductsToWishList(Integer index) {
         Actions actions = new Actions(webDriver);
         WebElement webElement = wishListButtons.get(index);
@@ -85,11 +77,6 @@ public class HomePage extends Menu {
     public Boolean isWishListPopupMessageDisplayed() {
         wait.until(ExpectedConditions.visibilityOf(wishListPopupMessage));
         return wishListPopupMessage.isDisplayed();
-    }
-
-    public void acceptCookie() {
-        wait.until(ExpectedConditions.elementToBeClickable(cookieAcceptButton));
-        cookieAcceptButton.click();
     }
 
     public void refuseCookie() {
@@ -110,6 +97,5 @@ public class HomePage extends Menu {
     public List<Product> getProductsInBasket() {
         return productsInBasket;
     }
-
 
 }
