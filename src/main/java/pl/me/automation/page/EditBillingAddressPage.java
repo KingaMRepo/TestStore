@@ -42,6 +42,10 @@ public class EditBillingAddressPage extends Menu {
     private WebElement editBillingAddressAlert;
     @FindBy(css=".woocommerce-error>li")
     private List<WebElement>errors;
+    @FindBy(css =".woocommerce-notices-wrapper")
+    private WebElement errorsField;
+
+
 
     public EditBillingAddressPage(WebDriver driver)
     {
@@ -133,7 +137,7 @@ public class EditBillingAddressPage extends Menu {
         return editBillingAddressAlert.isDisplayed();
     }
 
-    public List<String> getErrorLabels(){
+    public List<String> getErrorsLabels(){
         List<String>labels = new ArrayList<>();
         for (int i = 0; i <errors.size(); i++) {
             labels.add(errors.get(i).getText());

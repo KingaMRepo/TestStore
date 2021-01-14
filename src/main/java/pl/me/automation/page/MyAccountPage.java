@@ -76,6 +76,8 @@ public class MyAccountPage extends Menu {
     private WebElement logOutButton;
     @FindBy(css = ".woocommerce-MyAccount-content>div>ul")
     private WebElement changePasswordAndAccountDetailsErrors;
+    @FindBy(css = ".woocommerce-notices-wrapper +p")
+    private WebElement welcomeAdminText;
 
 
 
@@ -163,6 +165,7 @@ public class MyAccountPage extends Menu {
     }
 
     public String getUserNameText() {
+        wait.until(ExpectedConditions.visibilityOf(welcomeAdminText));
         return userNameText.getText();
 
     }
@@ -224,9 +227,9 @@ public class MyAccountPage extends Menu {
         lostPasswordUserLogin.sendKeys(user);
     }
 
-    public ChangePasswordPage clickResetPasswordSubmitButton() {
+    public MyAccountPage clickResetPasswordSubmitButton() {
         resetPasswordSubmitButton.click();
-        return new ChangePasswordPage(webDriver);
+        return new MyAccountPage(webDriver);
     }
 
     public String getResetPasswordSuccessSendAlert(){

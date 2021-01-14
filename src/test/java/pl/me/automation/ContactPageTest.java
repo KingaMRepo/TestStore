@@ -7,14 +7,17 @@ import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.ContactPage;
 import pl.me.automation.page.HomePage;
+import pl.me.automation.utils.Contact;
+import pl.me.automation.utils.TestDataReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ContactPageTest extends MyProperties {
+public class ContactPageTest extends TestDataReader {
     private WebDriver webDriver;
     private HomePage homePage;
+
 
     @BeforeEach
     public void init() {
@@ -24,7 +27,7 @@ public class ContactPageTest extends MyProperties {
         homePage.clickCookie();
     }
 
-    @AfterEach
+ //   @AfterEach
 //    public void destroy() {
 //        webDriver.close();
 //    }
@@ -32,11 +35,11 @@ public class ContactPageTest extends MyProperties {
     @Test
     public void shouldFillInAndSendForm() {
         ContactPage contactPage = homePage.clickContact();
-        contactPage.enterUserName("Dale");
-        contactPage.enterUserLastName("Cooper");
-        contactPage.selectMessageSubject("pytanie o produkt");
-        contactPage.enterEmailAddress("rirobjim679@lefaqr5.com");
-        contactPage.enterMessage("Neque porro quisquam est qui dolorem ipsum quia");
+        contactPage.enterUserName(contact.getContactPageEnterUserName());
+        contactPage.enterUserLastName(contact.getContactPageEnterUserLastName());
+        contactPage.selectMessageSubject(contact.getContactPageSelectMessageSubject());
+        contactPage.enterEmailAddress(contact.getContactPageEnterEmailAddress());
+        contactPage.enterMessage(contact.getContactPageSelectMessageSubject());
         contactPage.clickSendMessageButton();
         assertTrue(contactPage.isContactMessageDisplayed());
     }
@@ -54,11 +57,11 @@ public class ContactPageTest extends MyProperties {
     @Test
     public void shouldSendFormWithIncorrectEmail() {
         ContactPage contactPage = homePage.clickContact();
-        contactPage.enterUserName("Shelly");
-        contactPage.enterUserLastName("Johnson");
-        contactPage.selectMessageSubject("reklamacja");
-        contactPage.enterEmailAddress("rirobim664lefaqr5.com");
-        contactPage.enterMessage("Lorem ipsum dolor sit amet, consectetur adipiscing el");
+        contactPage.enterUserName(contact.getContactPageEnterUserName());
+        contactPage.enterUserLastName(contact.getContactPageEnterUserLastName());
+        contactPage.selectMessageSubject(contact.getContactPageSelectMessageSubject());
+        contactPage.enterEmailAddress(contact.getContactPageEnterIncorrectEmailAddress());
+        contactPage.enterMessage(contact.getContactPageEnterMessage());
         contactPage.clickSendMessageButton();
         assertTrue(contactPage.isEmailValidationErrorDisplayed());
     }

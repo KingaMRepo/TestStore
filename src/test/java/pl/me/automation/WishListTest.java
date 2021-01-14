@@ -34,7 +34,7 @@ public class WishListTest extends Forms {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         fillLoginAsAdminForm(myAccountPage);
         ShopPage shopPage = myAccountPage.clickShop();
-        shopPage.addProductsToWishListByIndex(2);
+        shopPage.addProductsToWishListByIndex(Integer.valueOf(shop.getShopPageAddProductsToWishListByIndex2()));
         WishListPage wishListPage = shopPage.clickWistListPage();
         String wishListProductName = wishListPage.getWishListProductName();
         MyAccountPage myAccountPage1 = wishListPage.clickMyAccount();
@@ -49,9 +49,9 @@ public class WishListTest extends Forms {
     @Test
     public void shouldAddProductToWishListFromShopPageAsNotLoggedInUser() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToWishListByIndex(3);
+        shopPage.addProductsToWishListByIndex(Integer.valueOf(shop.getShopPageAddProductsToWishListByIndex3()));
         WishListPage wishListPage = shopPage.clickWistListPage();
-        assertThat(wishListPage.getWishListProductName()).contains("Basic Blue Jeans");
+        assertThat(wishListPage.getWishListProductName()).contains(shop.getShopPageAddProductsToBasket2());
 
     }
 
@@ -60,44 +60,42 @@ public class WishListTest extends Forms {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         fillLoginAsUserForm(myAccountPage);
         myAccountPage.clickHome();
-        homePage.addProductsToWishList(0);
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList()));
         WishListPage wishListPage = homePage.clickWistListPage();
-        assertThat(wishListPage.getWishListProductName()).contains("DNK Gray Shoes");
+        assertThat(wishListPage.getWishListProductName()).contains(wishList.getWishListPageProduct());
 
     }
 
     @Test
     public void shouldAddProductToWishListFromHomePageAsNotLoggedUser() {
-        homePage.addProductsToWishList(2);
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList()));
         WishListPage wishListPage = homePage.clickWistListPage();
-        assertThat(wishListPage.getWishListProductName()).contains("Torn Blue Jeans");
+        assertThat(wishListPage.getWishListProductName()).contains(wishList.getWishListPageProduct());
 
     }
 
     @Test
     public void shouldAddProductFromWishListToCardAndProceedWithThePayment() {
-        homePage.addProductsToWishList(0);
-        homePage.addProductsToWishList(1);
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList()));
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList1()));
         WishListPage wistListPage = homePage.clickWistListPage();
-        ShoppingCardPage shoppingCardPage = wistListPage.addProductFromWishListToCard(0);
-        assertThat(shoppingCardPage.getProductName()).containsExactly("DNK Gray Shoes");
+        ShoppingCardPage shoppingCardPage = wistListPage.addProductFromWishListToCard(Integer.valueOf(wishList.getWistListPageAddProductFromWishListToCard()));
+        assertThat(shoppingCardPage.getProductName()).containsExactly(wishList.getWishListPageProduct());
         PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
         logInOnPaymentPageAsRegisteredUser(paymentPage);
         paymentPage.acceptTermsAndConditionsCheckbox();
         OrderPage orderPage = paymentPage.paymentAccept();
-        assertThat(orderPage.getWishListProductName().contains("DNK Gray Shoes"));
+        assertThat(orderPage.getWishListProductName().contains(wishList.getWishListPageProduct()));
 
     }
 
     @Test
     public void shouldRemoveProductFromWishList() {
-        homePage.addProductsToWishList(0);
-        homePage.addProductsToWishList(1);
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList()));
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList1()));
         WishListPage wishListPage = homePage.clickWistListPage();
-        wishListPage = wishListPage.removeProductsByName("DNK Gray Shoes");
+        wishListPage = wishListPage.removeProductsByName(wishList.getWishListPageProduct());
         assertTrue(wishListPage.isRemoveAlertDisplay());
 
     }
-
-
 }

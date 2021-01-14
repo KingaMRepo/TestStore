@@ -36,18 +36,18 @@ public class ShoppingCardTest extends Forms {
     @Test
     public void shouldCheckIfFreeShippingIsDisplayedWhenShoppingCardSumMoreThan300() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
-        shopPage.addProductsToBasket("Basic Blue Jeans");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket1());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        assertThat(shoppingCardPage.getDeliveryType().contains("Darmowa wysyłka"));
+        assertThat(shoppingCardPage.getDeliveryType().contains(shoppingCard.getShoppingCardPageGetDeliveryType()));
     }
 
     @Test
     public void shouldRemoveProductFromBasket() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket4());
         List<Product> productsFromBasket = shopPage.getProductsInBasket();
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         List<String> productNames = shoppingCardPage.getProductName();
@@ -55,8 +55,7 @@ public class ShoppingCardTest extends Forms {
                 .map(Product::getName)
                 .collect(Collectors.toList()))
                 .contains(productNames.toArray(new String[productNames.size()]));
-        shoppingCardPage.removeProductsByName("Anchor Bracelet");
-        productsFromBasket.removeIf(product -> product.getName().equals("Anchor Bracelet"));
+        shoppingCardPage.removeProductsByName(shop.getShopPageAddProductsToBasket3());
         shoppingCardPage = new ShoppingCardPage(webDriver);
         productNames = shoppingCardPage.getProductName();
         assertThat(productsFromBasket.stream()
@@ -67,62 +66,56 @@ public class ShoppingCardTest extends Forms {
 
     @Test
     public void shouldAddToCartFromShopPage() {
-        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
-        shopPage.addProductsToBasket("Boho Bangle Bracelet");
-        shopPage.addProductsToBasket("Buddha Bracelet");
-        ShopPage shopPage1 = shopPage.selectShopCategory("Kobieta");
-        shopPage1.addProductsToBasket("Basic Gray Blue Jeans");
-        shopPage1.addProductsToBasket("Basic Blue Jeans");
-        ShopPage shopPage2 = shopPage.selectShopCategory("Mężczyzna");
-        shopPage2.addProductsToBasket("Aqua Wind Breaker");
-        shopPage2.addProductsToBasket("Basic Blue Jeans");
+        ShopPage shopPage = homePage.selectShopCategory(home.getHomeSelectShopCategory2());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket5());
+        ShopPage shopPage1 = shopPage.selectShopCategory(home.getHomeSelectShopCategory1());
+        shopPage1.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
+        ShopPage shopPage2 = shopPage.selectShopCategory(home.getHomePageSelectShopCategory3());
+        shopPage2.addProductsToBasket(shop.getShopPageAddProductsToBasket4());
         ShoppingCardPage shoppingCardPage = shopPage2.clickBasket();
-        assertThat(shoppingCardPage.getProductsInBasketNames()).containsExactly("Boho Bangle Bracelet", "Buddha Bracelet", "Basic Gray Blue Jeans", "Basic Blue Jeans", "Aqua Wind Breaker", "Basic Blue Jeans");
-
+        assertThat(shoppingCardPage.getProductsInBasketNames()).containsExactly(shop.getShopPageAddProductsToBasket5(), shop.getShopPageAddProductsToBasket2(), shop.getShopPageAddProductsToBasket4());
     }
 
     @Test
     public void shouldAddSameProductSeveralTimesAndGoToShoppingCard() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        assertThat(shoppingCardPage.getSummaryPrice(3).equals(shoppingCardPage.getShoppingCardTotalPrice()));
+        assertThat(shoppingCardPage.getSummaryPrice(Integer.valueOf(shoppingCard.getShoppingCardPageGetSummaryPrice())).equals(shoppingCardPage.getShoppingCardTotalPrice()));
     }
 
     @Test
     public void shouldAddSameProductWithDifferentFeaturesAndGoToShoppingCard() {
         ShopPage shopPage = homePage.clickShop();
-        SearchResultsPage searchResultsPage = shopPage.findProduct("Jeans");
+        SearchResultsPage searchResultsPage = shopPage.findProduct(shop.getShopPageFindProduct());
         ShopPage shopPage1 = searchResultsPage.clickSearchResultButton();
-        assertThat(shopPage1.getFilteredProductName()).containsExactly("Torn Blue Jeans", "Blue Denim Jeans", "Black Washed Jeans", "Basic Blue Jeans", "Blue Denim Jeans", "Basic Gray Blue Jeans", "Torn Blue Jeans", "Basic Blue Jeans");
-
+        assertThat(shopPage1.getFilteredProductName()).containsExactly(
+                shop.getShopPageGetJeansTornBlueJeans(),
+                shop.getShopPageGetJeansBlueDenimJeans(),
+                shop.getShopPageGetJeansBlackWashedJeans(),
+                shop.getShopPageGetJeansBasicBlueJeans(),
+                shop.getShopPageGetBlueDenimJeans(),
+                shop.getShopPageGetBasicGrayBlueJeans(),
+                shop.getShopPageGetTornBlueJeans(),
+                shop.getShopPageGetBasicBlueJeans());
     }
 
     @Test
     public void shouldCheckIfPendingShoppingCardSumsUpWithNewAdded() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Black Jacket");
-        shopPage.addProductsToBasket("Basic Blue Jeans");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket1());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         Double totalPrice = shoppingCardPage.getShoppingCardTotalPrice();
         PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        paymentPage.enterBillingUserName("marek");
-        paymentPage.enterBillingUserLastName("nowak");
-        paymentPage.selectBillingCountry(1);
-        paymentPage.enterBillingUserAddress("Kwiatowa");
-        paymentPage.enterBillingUserCity("Poznań");
-        paymentPage.enterBillingUserPostCode("60001");
-        paymentPage.enterBillingUserPhone("600500400");
-        paymentPage.enterBillingUserEmail("qwertt!#12@nazwa.pl");
-        paymentPage.enterBillingAccountUsername("kinga");
-        paymentPage.enterBillingAccountPassword("&%SIytrdf!90");
+        fillInPaymentFormCorrectly(paymentPage);
         paymentPage.deselectShipToDifferentAddressCheckbox();
         paymentPage.acceptTermsAndConditionsCheckbox();
         shopPage = paymentPage.clickShop();
-        shopPage.addProductsToBasket("Black Jacket");
-        Double productPrice = shopPage.getProductPrice("Black Jacket");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket1());
+        Double productPrice = shopPage.getProductPrice(shop.getShopPageAddProductsToBasket1());
         shoppingCardPage = shopPage.clickBasket();
         assertThat(totalPrice + productPrice).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice());
     }
@@ -130,15 +123,15 @@ public class ShoppingCardTest extends Forms {
     @Test
     public void shouldAddCouponCodeAndCheckIfAppliedCorrectly() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Anchor Bracelet");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        shoppingCardPage.applyCouponCode("AD8PGRAD");
+        shoppingCardPage.applyCouponCode(shoppingCard.getShoppingCardPageApplyCorrectCouponCode());
         shoppingCardPage = new ShoppingCardPage(webDriver);
-        assertTrue(shoppingCardPage.getAppliedCouponSuccessfullyAlertMessage().contains("Kupon został pomyślnie użyty."));
+        assertTrue(shoppingCardPage.getAppliedCouponSuccessfullyAlertMessage().contains(shoppingCard.getShoppingCardPageGetAppliedCouponSuccessfullyAlertMessage()));
         Double productPriceAmount = shoppingCardPage.getProductPriceAmount();
         Double productCouponAmount = shoppingCardPage.getProductCouponAmount();
-        Double productShipping = shoppingCardPage.getProductShippingFirstMethod();
+        Double productShipping = shoppingCardPage.getProductShippingFirstMethodPrice();
         Double productSumPrice = shoppingCardPage.getProductSumPrice();
         assertThat(productPriceAmount - productCouponAmount + productShipping).isEqualTo(productSumPrice);
     }
@@ -146,26 +139,25 @@ public class ShoppingCardTest extends Forms {
     @Test
     public void shouldAddIncorrectCouponCodeAndCheckIfApplied() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Anchor Bracelet");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        String couponCode = shoppingCardPage.applyCouponCode("AD8PGRA?");
+        String couponCode = shoppingCardPage.applyCouponCode(shoppingCard.getShoppingCardPageApplyCouponCode());
         shoppingCardPage = new ShoppingCardPage(webDriver);
-        assertThat(shoppingCardPage.getAppliedCouponFailAlertMessage().contains("Kupon"+ couponCode +"nie istnieje!"));
+        assertThat(shoppingCardPage.getAppliedCouponFailAlertMessage().contains(shoppingCard.getShoppingCardPageGetAppliedCouponFailAlertMessageOne()+ couponCode +shoppingCard.getShoppingCardPageGetAppliedCouponFailAlertMessageTwo()));
     }
 
     @Test
     public void shouldCheckIfShipmentAmountIsCorrectlyCalculated() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket2());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        shoppingCardPage.chooseShippingMethod(0);
+        shoppingCardPage.chooseShippingMethod(Integer.valueOf(shoppingCard.getShoppingCardPageChooseShippingMethod()));
         shoppingCardPage = new ShoppingCardPage(webDriver);
         Double productPriceAmount = shoppingCardPage.getProductPriceAmount();
         Double productSumPrice = shoppingCardPage.getProductSumPrice();
-        assertThat(productPriceAmount + shoppingCardPage.getProductShippingFirstMethod()).isEqualTo(productSumPrice);
-
+        assertThat(productPriceAmount + shoppingCardPage.getProductShippingFirstMethodPrice()).isEqualTo(productSumPrice);
     }
 
 

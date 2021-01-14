@@ -23,11 +23,9 @@ public class WebDriverTest {
     private static Stream<Arguments> provideWebDriverType(){
         return Stream.of(
         Arguments.of(WebDriverType.CHROME)
-        //Arguments.of(WebDriverType.FIREFOX),
-        //Arguments.of(WebDriverType.EDGE),
-       // Arguments.of(WebDriverType.IE),
-        //Arguments.of(WebDriverType.OPERA)
+
         );
     }
 
 }
+

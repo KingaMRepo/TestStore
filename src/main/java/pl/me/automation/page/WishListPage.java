@@ -20,7 +20,7 @@ public class WishListPage extends Menu {
     private List<WebElement> productsNames;
     @FindBy(css = "td >a[class*='remove_from_wishlist']")
     private List<WebElement> productRemoveButtons;
-    @FindBy(css="div.woocommerce-message ")
+    @FindBy(css="div.woocommerce-message")
     private WebElement removeAlert;
     @FindBy(css = ".product-name>a")
     private WebElement wishListProduct;

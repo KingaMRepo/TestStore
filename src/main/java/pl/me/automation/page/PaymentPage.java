@@ -28,8 +28,8 @@ public class PaymentPage extends Menu {
     private WebElement paymentAddress;
     @FindBy(id = "billing_city")
     private WebElement paymentCity;
-    @FindBy(id = "billing_state")
-    private WebElement paymentRegion;
+    @FindBy(css = "input#billing_state")
+    private WebElement paymentProvince;
     @FindBy(id = "billing_postcode")
     private WebElement paymentPostCode;
     @FindBy(id = "billing_phone")
@@ -126,11 +126,10 @@ public class PaymentPage extends Menu {
     private WebElement stipeCardValidityError;
     @FindBy(css = ".stripe-source-errors>ul")
     private WebElement stipeErrorField;
-
-
-
-
-
+    @FindBy(css = "ul.woocommerce-error")
+    private WebElement billingError;
+    @FindBy(css= ".woocommerce-error li:first-child")
+    private WebElement billingNameError;
 
 
     public PaymentPage(WebDriver driver) {
@@ -163,9 +162,9 @@ public class PaymentPage extends Menu {
         paymentCity.sendKeys(city);
     }
 
-    public void enterBillingUserRegion(String region) {
-        paymentRegion.clear();
-        paymentRegion.sendKeys(region);
+    public void enterBillingProvince(String province){
+        paymentProvince.clear();
+        paymentProvince.sendKeys(province);
     }
 
     public void enterBillingUserPostCode(String postCode) {
@@ -225,7 +224,6 @@ public class PaymentPage extends Menu {
         wait.until(ExpectedConditions.visibilityOf(paymentFormEmailError));
         return paymentFormEmailError.isDisplayed();
     }
-
 
 
     public String getShippingMethodRate() {
@@ -331,11 +329,7 @@ public class PaymentPage extends Menu {
     }
 
     public List<String> getErrorLabels() {
-//        List<String> labels = new ArrayList<>();
-//        for (int i = 0; i < errors.size(); i++) {
-//            labels.add(errors.get(i).getText());
-//        }
-//        return labels;
+        wait.until(ExpectedConditions.visibilityOf(billingError));
         return errors.stream()
                 .map(price -> price.getText())
                 .collect(Collectors.toList());
@@ -394,10 +388,17 @@ public class PaymentPage extends Menu {
         return unableToProcessOrderAlert.getText();
     }
 
-    public String getStipeCardValidityErrorText() {
+    public String getStripeCardValidityErrorText() {
         wait.until(ExpectedConditions.visibilityOf(stipeErrorField));
         return stipeCardValidityError.getText();
     }
+
+    public String getBillingNameErrorText() {
+        wait.until(ExpectedConditions.visibilityOf(billingNameError));
+        return billingNameError.getText();
+    }
+
+
 
 
 }

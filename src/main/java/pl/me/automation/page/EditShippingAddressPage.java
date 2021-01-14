@@ -32,6 +32,10 @@ public class EditShippingAddressPage extends Menu {
     private WebElement shippingAddressFormErrorAlert;
     @FindBy(css=".woocommerce-error>li")
     private List<WebElement>errors;
+    @FindBy(css = ".woocommerce-notices-wrapper>ul")
+    private WebElement errorField;
+    @FindBy(css = "input#shipping_state")
+    private WebElement shippingState;
 
 
 
@@ -72,6 +76,11 @@ public class EditShippingAddressPage extends Menu {
         shippingAddress1.clear();
     }
 
+    public void enterShippingState(String shippingProvince){
+        shippingState.clear();
+        shippingState.sendKeys(shippingProvince);
+    }
+
 
     public void enterShippingPostalCode(String billingAddress1) {
         shippingPostcode.clear();
@@ -107,6 +116,7 @@ public class EditShippingAddressPage extends Menu {
     }
 
     public List<String> getErrorLabels(){
+        wait.until(ExpectedConditions.visibilityOf(errorField));
         List<String>labels = new ArrayList<>();
         for (int i = 0; i <errors.size(); i++) {
             labels.add(errors.get(i).getText());

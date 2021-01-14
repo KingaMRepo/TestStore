@@ -70,30 +70,13 @@ public class ShoppingCardPage extends Menu {
         }
     }
 
-    public List<String> getDeliveryType() {
-//        List<String>list = new ArrayList<>();
-//        for (int i = 0; i <deliveryRadioButtonsLabels.size() ; i++) {
-//            list.add(deliveryRadioButtonsLabels.get(i).getText());
-//        }
-//        return list;
-
-        return deliveryRadioButtonsLabels.stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
-
-    }
 
     public List<String> getProductName() {
-//        wait.until(ExpectedConditions.elementToBeClickable(h1Header));
-//        List<String> list = new ArrayList<>();
-//        for (int i = 0; i < productFromBasket.size(); i++) {
-//            list.add(productFromBasket.get(i).getText());
-//        }
-//        return list;
         return productFromBasket.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
     }
+
 
     public void removeProductsByName(String name) {
         products.get(name).getButton().click();
@@ -105,11 +88,6 @@ public class ShoppingCardPage extends Menu {
 
     public Double getShoppingCardTotalPrice() {
         return Double.valueOf(basketTotalPrice.getText().replace("Kwota zł", ""));
-    }
-
-    public PaymentPage proceedToCheckout() {
-        proceedToCheckoutButton.click();
-        return new PaymentPage(webDriver);
     }
 
     public Double getProductPrice(String name) {
@@ -147,27 +125,24 @@ public class ShoppingCardPage extends Menu {
         return couponErrorAlert.getText();
     }
 
-
     public Double getProductPriceAmount() {
         wait.until(ExpectedConditions.visibilityOf(priceAmount));
         return Double.valueOf(priceAmount.getText().replace("zł", ""));
     }
 
-
     public Double getProductCouponAmount() {
         return Double.valueOf(couponAmount.getText().replace("zł", ""));
     }
 
-    public Double getProductShippingFirstMethod() {
+    public Double getProductShippingFirstMethodPrice() {
         return Double.valueOf(shippingPriceFirstMethod.getText().replace("zł", ""));
     }
 
-    public Double getProductShippingSecondMethod() {
+    public Double getProductShippingSecondMethodPrice() {
         return Double.valueOf(shippingPriceSecondMethod.getText().replace("zł", ""));
     }
 
-
-    public Double getProductShippingThirdMethod() {
+    public Double getProductShippingThirdMethodPrice() {
         return Double.valueOf(shippingPriceThirdMethod.getText().replace("zł", ""));
     }
 
@@ -180,6 +155,22 @@ public class ShoppingCardPage extends Menu {
             shippingMethods.get(index).click();
         }
         return new ShoppingCardPage(webDriver);
+    }
+
+    public List<String> getDeliveryType() {
+        return deliveryRadioButtonsLabels.stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+    }
+    //        List<String>list = new ArrayList<>();
+//        for (int i = 0; i <deliveryRadioButtonsLabels.size() ; i++) {
+//            list.add(deliveryRadioButtonsLabels.get(i).getText());
+//        }
+//        return list;
+
+    public PaymentPage proceedToCheckout() {
+        proceedToCheckoutButton.click();
+        return new PaymentPage(webDriver);
     }
 
 

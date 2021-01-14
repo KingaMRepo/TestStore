@@ -35,6 +35,8 @@ public class ChangePasswordPage extends Menu {
     private WebElement myAccountWelcomeAlert;
     @FindBy(css=".woocommerce-error>li")
     private List<WebElement> errors;
+    @FindBy(css="div.woocommerce-message")
+    private WebElement accountDetailsChangedAlert;
 
 
 
@@ -106,8 +108,8 @@ public class ChangePasswordPage extends Menu {
         return alert.getText();
     }
 
-    public Boolean isAlertDisplayed(){
-        return alert.isDisplayed();
+    public Boolean isAccountDetailsChangedAlertAlertDisplayed(){
+        return accountDetailsChangedAlert.isDisplayed();
     }
 
     public Boolean isMyAccountWelcomeTextDisplayed(){

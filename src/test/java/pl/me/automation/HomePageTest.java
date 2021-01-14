@@ -8,13 +8,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.domain.Product;
 import pl.me.automation.page.*;
+import pl.me.automation.utils.TestDataReader;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HomePageTest {
+public class HomePageTest extends TestDataReader {
     private WebDriver webDriver;
     private HomePage homePage;
 
@@ -36,19 +37,19 @@ public class HomePageTest {
     public void shouldDeleteProductsFromWidget() {
         HomePage homePage = new HomePage(webDriver);
         ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket("Anchor Bracelet");
-        shopPage.addProductsToBasket("Aqua Wind Breaker");
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket4());
         shopPage.showProductsFromWidget();
-        shopPage= shopPage.deleteProductFromWidgetByName("Aqua Wind Breaker");
+        shopPage= shopPage.deleteProductFromWidgetByName(shop.getShopPageAddProductsToBasket4());
         shopPage.showProductsFromWidget();
         String totalPrice = shopPage.getWidgetTotalPrice();
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        assertThat(totalPrice.replace("Kwota: zł", "")).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice()+ "0");
+        assertThat(totalPrice.replace(shoppingCard.getShoppingCardPageReplaceTarget(), shoppingCard.getShoppingCardPageReplacement())).isEqualTo(shoppingCardPage.getShoppingCardTotalPrice() + shoppingCard.getShoppingCardPageZero());
     }
 
     @Test
         public void shouldAddProductToWishList() {
-        homePage.addProductsToWishList(0);
+        homePage.addProductsToWishList(Integer.valueOf(home.getHomePageAddProductsToWishList()));
         assertThat(homePage.isWishListPopupMessageDisplayed()).isTrue();
     }
 
@@ -60,8 +61,8 @@ public class HomePageTest {
 
     @Test
     public void addRecommendedProductToBasket(){
-        homePage.addRecommendedProductsToBasket("DNK Gray Shoes");
-        homePage.addRecommendedProductsToBasket("DNK Blue Sport Shoes");
+        homePage.addRecommendedProductsToBasket(home.getHomePageAddRecommendedProductsToBasket1());
+        homePage.addRecommendedProductsToBasket(home.getHomePageAddRecommendedProductsToBasket2());
         List<Product> products =  homePage.getProductsInBasket();
         HomePage homePage = new HomePage(webDriver);
         ShoppingCardPage shoppingCardPage = homePage.clickShoppingCard();

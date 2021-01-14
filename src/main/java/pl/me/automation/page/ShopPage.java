@@ -75,6 +75,8 @@ public class ShopPage extends Menu {
     private WebElement dragAndDropSliderMaxFilter;
     @FindBy(css = ".astra-shop-summary-wrap>a>h2")
     private List<WebElement> filteredProductsNames;
+    @FindBy(css=".woocommerce-result-count")
+    private WebElement displayedNamesText;
 
 
     private Map<String, Product> products = new HashMap<>();
@@ -89,7 +91,6 @@ public class ShopPage extends Menu {
         for (int i = 0; i < productNames.size(); i++) {
             products.put(productNames.get(i).getText(), new Product(productButton.get(i), productPrices.get(i).getText(), 0, productNames.get(i).getText()));
         }
-
     }
 
     public SearchResultsPage findProduct(String text) {
@@ -98,7 +99,6 @@ public class ShopPage extends Menu {
         searchSubmit.click();
         return new SearchResultsPage(webDriver);
     }
-
 
     public void filterProductsBySize(String value) {
         Select select = new Select(sizeFilterSelect);
@@ -115,16 +115,6 @@ public class ShopPage extends Menu {
     public void sortProducts(String value) {
         Select select = new Select(sortingSelect);
         select.selectByVisibleText(value);
-        submitButton.submit();
-    }
-
-    public void activeFilterDelete() {
-        activeFilterButton.click();
-    }
-
-    public void activeFiltersDeleteByIndex(Integer index) {
-
-        activeFilters.get(index).click();
     }
 
     public void activeFiltersDeleteByName(String name) {
@@ -147,15 +137,15 @@ public class ShopPage extends Menu {
     }
 
     public List<String> getFilterLabels() {
-//        List<String> list = new ArrayList<>();
-//        for (int i = 0; i < activeFilters.size(); i++) {
-//            list.add(activeFilters.get(i).getText());
-//        }
-//        return list;
         return activeFilters.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
     }
+    //        List<String> list = new ArrayList<>();
+//        for (int i = 0; i < activeFilters.size(); i++) {
+//            list.add(activeFilters.get(i).getText());
+//        }
+//        return list;
 
 
     public List<Product> getProductsInBasket() {
@@ -213,7 +203,14 @@ public class ShopPage extends Menu {
     }
 
     public List<Double> getStarRating() {
-//        List<Double>rating = new ArrayList<>();
+        return starRating.stream()
+                .map(WebElement::getText)
+                .filter(rating -> rating != null && !rating.isEmpty())
+                .mapToDouble(rating -> Double.parseDouble(rating.replaceAll("\\D+", "")))
+                .boxed().collect(Collectors.toList());
+    }
+
+    //        List<Double>rating = new ArrayList<>();
 //        for (int i = 0; i <starRating.size() ; i++) {
 //            String ratingNumber = starRating.get(i).getText();
 //            System.out.println(ratingNumber);
@@ -222,27 +219,18 @@ public class ShopPage extends Menu {
 //            }
 //        }
 //        return rating;
-        return starRating.stream()
-                .map(WebElement::getText)
-                .filter(rating -> rating != null && !rating.isEmpty())
-                .mapToDouble(rating -> Double.parseDouble(rating.replaceAll("\\D+", "")))
-                .boxed()
-                .collect(Collectors.toList());
-
-    }
 
     public List<String> getProductPrice() {
-//        List<String>price = new ArrayList<>();
+        return productPrice.stream()
+                .map(price -> price.getText())
+                .collect(Collectors.toList());
+    }
+
+    //        List<String>price = new ArrayList<>();
 //        for (int i = 0; i <productPrice.size() ; i++) {
 //            price.add(productPrice.get(i).getText());
 //        }
 //        return price;
-
-        return productPrice.stream()
-                .map(price -> price.getText())
-                .collect(Collectors.toList());
-
-    }
 
     public void dragAndDropPriceFilter() {
         Actions actions = new Actions(webDriver);
@@ -285,12 +273,10 @@ public class ShopPage extends Menu {
     }
 
 
-    public List<String> getFilteredProductName(){
-        List<String> name = new ArrayList<>();
-        for (int i = 0; i < filteredProductsNames.size(); i++) {
-                name.add(productNames.get(i).getText());
-        }
-        return name;
+    public List<String> getFilteredProductName() {
+        return productNames.stream()
+                .map(price -> price.getText())
+                .collect(Collectors.toList());
     }
 
 }

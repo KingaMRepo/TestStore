@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import pl.me.automation.config.WebDriverType;
 import pl.me.automation.page.*;
+import pl.me.automation.utils.TestDataReader;
 
 import java.util.Comparator;
 import java.util.List;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ShopPageTest {
+public class ShopPageTest extends TestDataReader {
     private WebDriver webDriver;
     private HomePage homePage;
 
@@ -34,21 +35,21 @@ public class ShopPageTest {
     @Test
     public void shouldFindProductByWritingCorrectPhrase() {
         ShopPage shopPage = homePage.clickShop();
-        SearchResultsPage searchResult = shopPage.findProduct("jeans");
+        SearchResultsPage searchResult = shopPage.findProduct(shop.getShopPageFindProduct());
         assertThat(searchResult.isSearchResultsPageDisplayedShowingProduct()).isTrue();
     }
 
     @Test
     public void shouldFindProductByWritingIncorrectPhrase() {
-        ShopPage shopPage = homePage.selectShopCategory("Kobieta");
-        SearchResultsPage searchResult = shopPage.findProduct("aaajeanns");
+        ShopPage shopPage = homePage.selectShopCategory(home.getHomeSelectShopCategory1());
+        SearchResultsPage searchResult = shopPage.findProduct(shop.getShopPageFindProductIncorrectFrase());
         assertThat(searchResult.isSearchResultsPageDisplayedShowingAlert()).isTrue();
     }
 
     @Test
     public void shouldSortProductByItsRate() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.sortProducts("Sortuj wg średniej oceny");
+        shopPage.sortProducts(shop.getShopPageSortProductsSortByAverageGrade());
         shopPage = new ShopPage(webDriver);
         assertThat(shopPage.getStarRating()).isSortedAccordingTo(Comparator.reverseOrder());
     }
@@ -56,8 +57,8 @@ public class ShopPageTest {
     @Test
     public void shouldSortProductByItsPrice() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.sortProducts("Sortuj wg ceny: od najniższej");
-        shopPage.sortProducts("Sortuj wg ceny: od najwyższej");
+        shopPage.sortProducts(shop.getShopPageSortProductsFromLowestPrice());
+        shopPage.sortProducts(shop.getShopPageSortProductsFromHighestPrice());
         assertThat(shopPage.getProductPrice()).isSortedAccordingTo(Comparator.reverseOrder());
     }
 
@@ -65,7 +66,7 @@ public class ShopPageTest {
     @Test
     public void shouldGoFromSearchResultsToProductCardClickingOnProductSlidePhotoAndClose() {
         ShopPage shopPage = homePage.clickShop();
-        SearchResultsPage searchResult = shopPage.findProduct("Aqua Wind Breaker");
+        SearchResultsPage searchResult = shopPage.findProduct(shop.getShopPageAddProductsToBasket4());
         SingleProductPage photoZoom = searchResult.displayProductPhoto();
         photoZoom.ZoomProductPhoto();
         assertTrue(photoZoom.isZoomImageDisplayed());
@@ -74,12 +75,12 @@ public class ShopPageTest {
     @Test
     public void shouldDeleteChosenFilters() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.filterProductsBySize("XL");
-        shopPage.filterProductsBySize("30");
-        shopPage.filterProductsByColour("Gray");
-        shopPage.activeFiltersDeleteByName("30");
+        shopPage.filterProductsBySize(shop.getShopPageFilterProductsBySize3());
+        shopPage.filterProductsBySize(shop.getShopPageFilterProductsBySize4());
+        shopPage.filterProductsByColour(shop.getShopPageFilterProductsByColour());
+        shopPage.activeFiltersDeleteByName(shop.getShopPageFilterProductsBySize4());
         List<String> filterLabels = shopPage.getFilterLabels();
-        assertThat(filterLabels).containsExactly("Gray", "XL");
+        assertThat(filterLabels).containsExactly(shop.getShopPageFilterProductsByColour(), shop.getShopPageFilterProductsBySize3());
     }
 
 
@@ -95,19 +96,19 @@ public class ShopPageTest {
     @Test
     public void shouldFilterProductBySize() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.filterProductsBySize("36");
-        shopPage.filterProductsBySize("34");
-        shopPage.activeFiltersDeleteByName("36");
+        shopPage.filterProductsBySize(shop.getShopPageFilterProductsBySize1());
+        shopPage.filterProductsBySize(shop.getShopPageFilterProductsBySize2());
+        shopPage.activeFiltersDeleteByName(shop.getShopPageFilterProductsBySize1());
         List<String> filterLabels = shopPage.getFilterLabels();
-        assertThat(filterLabels).containsExactly("34");
+        assertThat(filterLabels).containsExactly(shop.getShopPageFilterProductsBySize2());
 
     }
 
     @Test
     public void shouldFilterProductByColour() {
         ShopPage shopPage = homePage.clickShop();
-        shopPage.filterProductsByColour("Blue");
-        shopPage.activeFiltersDeleteByName("Blue");
+        shopPage.filterProductsByColour(shop.getShopPageFilterProductsByColour2());
+        shopPage.activeFiltersDeleteByName(shop.getShopPageActiveFiltersDeleteByName1());
         List<String> filterLabels = shopPage.getFilterLabels();
         assertThat(filterLabels).containsExactly();
 

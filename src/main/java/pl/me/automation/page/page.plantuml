@@ -1,0 +1,718 @@
+@startuml
+
+title __PAGE's Class Diagram__\n
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.AboutPage {
+          - header : WebElement
+          + AboutPage()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.ChangePasswordPage {
+          - acceptNewPassword : WebElement
+          - accountDisplayName : WebElement
+          - accountEmail : WebElement
+          - accountFirstName : WebElement
+          - accountLastName : WebElement
+          - accountNameMessage : WebElement
+          - alert : WebElement
+          - currentPassword : WebElement
+          - errors : List<WebElement>
+          - myAccountWelcomeAlert : WebElement
+          - newPassword : WebElement
+          - submitButton : WebElement
+          + ChangePasswordPage()
+          + acceptNewPassword()
+          + clearAccountDisplayName()
+          + clearAccountEmail()
+          + clearAccountFirstName()
+          + clearAccountLastName()
+          + enterAccountDisplayName()
+          + enterAccountEmail()
+          + enterAccountFirstName()
+          + enterAccountLastName()
+          + enterCurrentPassword()
+          + enterNewPassword()
+          + getAlertText()
+          + getErrorLabels()
+          + isAlertDisplayed()
+          + isMyAccountWelcomeTextDisplayed()
+          + submitPassword()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.ContactPage {
+          - contactMessage : WebElement
+          - emailValidationError : WebElement
+          - header : WebElement
+          - messageSubjectSelect : WebElement
+          - messageValidationError : WebElement
+          - nameValidationError : WebElement
+          - sendMessageButton : WebElement
+          - userEmailInput : WebElement
+          - userLastName : WebElement
+          - userMessageInput : WebElement
+          - userNameInput : WebElement
+          + ContactPage()
+          + clickSendMessageButton()
+          + enterEmailAddress()
+          + enterMessage()
+          + enterUserLastName()
+          + enterUserName()
+          + isContactMessageDisplayed()
+          + isEmailValidationErrorDisplayed()
+          + isMessageValidationError()
+          + isNameValidationError()
+          + selectMessageSubject()
+          + sendMessage()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.EditBillingAddressPage {
+          - address1Input : WebElement
+          - address2Input : WebElement
+          - billingState : WebElement
+          - cityInput : WebElement
+          - companyInput : WebElement
+          - countrySelect : WebElement
+          - editBillingAddressAlert : WebElement
+          - errors : List<WebElement>
+          - header : WebElement
+          - paymentAddress : WebElement
+          - phoneNumber : WebElement
+          - postCodeInput : WebElement
+          - stateInput : WebElement
+          - submitButton : WebElement
+          - userLastNameInput : WebElement
+          - userNameInput : WebElement
+          + EditBillingAddressPage()
+          + clearBillingAddress1()
+          + clearBillingCity()
+          + clearBillingPhoneNumber()
+          + clearBillingPostCode()
+          + clearBillingRegion()
+          + clearBillingUserLastName()
+          + clearBillingUserName()
+          + clickBillingSubmitButton()
+          + enterBillingAddress1()
+          + enterBillingCity()
+          + enterBillingPhoneNumber()
+          + enterBillingPostCode()
+          + enterBillingRegion()
+          + enterBillingUserLastName()
+          + enterBillingUserName()
+          + getErrorLabels()
+          + getPaymentAddress()
+          + isEditBillingAddressAlertDisplayed()
+          + selectBillingCountryName()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.EditShippingAddressPage {
+          - errors : List<WebElement>
+          - header : WebElement
+          - shippingAddress1 : WebElement
+          - shippingAddressFormAlert : WebElement
+          - shippingAddressFormErrorAlert : WebElement
+          - shippingCity : WebElement
+          - shippingCountrySelect : WebElement
+          - shippingFirstLastName : WebElement
+          - shippingFirstName : WebElement
+          - shippingPostcode : WebElement
+          - shippingSaveButton : WebElement
+          + EditShippingAddressPage()
+          + clearShippingAddress1()
+          + clearShippingCity()
+          + clearShippingPostcode()
+          + clearShippingUserLastName()
+          + clearShippingUserName()
+          + clickShippingSubmitButton()
+          + enterShippingAddress1()
+          + enterShippingCity()
+          + enterShippingPostalCode()
+          + enterShippingUserLastName()
+          + enterShippingUserName()
+          + getErrorLabels()
+          + getShippingAddressFormAlert()
+          + isShippingAddressFormAlert()
+          + selectBillingCountryName()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.HomePage {
+          - acceptCookieButton : WebElement
+          - addToShoppingCardButton : WebElement
+          - buyButton : WebElement
+          - checkShoppingCardButton : WebElement
+          - contactMessage : WebElement
+          - cookieAcceptButton : WebElement
+          - cookieNotice : WebElement
+          - cookieNoticeContainer : WebElement
+          - cookiePrivacyPolicyButton : WebElement
+          - cookieRefuseButton : WebElement
+          - products : Map<String, Product>
+          - productsInBasket : List<Product>
+          - recommendedProducts : List<WebElement>
+          - recommendedProductsNames : List<WebElement>
+          - wishListButtons : List<WebElement>
+          - wishListPopupMessage : WebElement
+          + HomePage()
+          + addProductsToWishList()
+          + addRecommendedProductsToBasket()
+          + clickCookie()
+          + getProductsInBasket()
+          + isCookieRefuseButtonDisplayed()
+          + isWishListPopupMessageDisplayed()
+          + refuseCookie()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.LoggedInUserPage {
+          - loggedInUserPageText : WebElement
+          + LoggedInUserPage()
+          + isLogeInUserPageDisplayed()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.LostPasswordReminderPage {
+          {static} + resetText : String
+          - lostPasswordInfoText : WebElement
+          - resetPasswordButton : WebElement
+          - resetPasswordMessage : WebElement
+          - userLoginInput : WebElement
+          + LostPasswordReminderPage()
+          + clickResetPasswordButton()
+          + getResetPasswordText()
+          + insertUserLoginOrEmail()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      abstract class pl.me.automation.page.Menu {
+          + h1Header : WebElement
+          - aboutButton : WebElement
+          - contactButton : WebElement
+          - homeButton : WebElement
+          - logoButton : WebElement
+          - myAccountButton : WebElement
+          - shopButton : WebElement
+          - shopSubMenu : List<WebElement>
+          - shoppingCardButton : WebElement
+          - widgetButton : WebElement
+          - widgetCard : WebElement
+          - widgetProduct : List<WebElement>
+          - widgetProductNames : List<WebElement>
+          - wishListButton : WebElement
+          + Menu()
+          + clickAboutPage()
+          + clickContact()
+          + clickHome()
+          + clickLogo()
+          + clickMyAccount()
+          + clickMyAccountWaitForOrder()
+          + clickShop()
+          + clickShoppingCard()
+          + clickWistListPage()
+          + deleteProductFromWidgetByName()
+          + goFromWidgetButtonToShoppingCard()
+          + selectShopCategory()
+          + showProductsFromWidget()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.MyAccountPage {
+          - addressAndBillingButton : WebElement
+          - addressAndBillingEditButton : WebElement
+          - changePasswordAndAccountDetailsButton : WebElement
+          - changePasswordAndAccountDetailsErrors : WebElement
+          - errorAlert : WebElement
+          - gmailLogInUserName : WebElement
+          - header : WebElement
+          - logOutButton : WebElement
+          - loginEmail : WebElement
+          - loginPasswordInput : WebElement
+          - logoutFromMyAccountButton : WebElement
+          - lostPasswordReminder : WebElement
+          - lostPasswordUserLogin : WebElement
+          - myAccountUserText : WebElement
+          - orderListButton : WebElement
+          - orderListLastOrder : WebElement
+          - passwordInput : WebElement
+          - passwordReminder : WebElement
+          - paymentAddress : WebElement
+          - paymentAndDeliveryAddressesButton : WebElement
+          - paymentAndDeliveryAddressesMessage : WebElement
+          - registerButton : WebElement
+          - rememberMeCheckbox : WebElement
+          - resetPasswordSubmitButton : WebElement
+          - resetPasswordSuccessSendAlert : WebElement
+          - shippingAddressEditButton : WebElement
+          - showOrderDetailsButtons : List<WebElement>
+          - submitButton : WebElement
+          - userEmailInput : WebElement
+          - userNameInput : WebElement
+          - userNameOrEmailInput : WebElement
+          - userNameText : WebElement
+          - welcomeToMyAccountText : WebElement
+          + MyAccountPage()
+          + clickAddressAndBillingButton()
+          + clickEditAddressAndBillingEditButton()
+          + clickEditShippingAddressEditButtonButton()
+          + clickIntoChangePasswordAndAccountDetailsButton()
+          + clickLastOrdersButton()
+          + clickLoginPasswordReminder()
+          + clickLoginRememberMeCheckbox()
+          + clickLoginSubmit()
+          + clickLostPasswordReminderButton()
+          + clickOrderDetailsButton()
+          + clickPaymentAndDeliveryAddressesButton()
+          + clickRegister()
+          + clickRegisterFalse()
+          + clickResetPasswordSubmitButton()
+          + enterLoginOrEmailToLostPasswordUserField()
+          + enterLoginUserLoginPassword()
+          + enterLoginUserNameOrEmail()
+          + enterRegisterUserEmail()
+          + enterRegisterUserName()
+          + enterRegisterUserPassword()
+          + getDisplayedEmail()
+          + getMyAccountUserText()
+          + getOrderListLastOrder()
+          + getPaymentAddress()
+          + getRegistrationAndLoginErrorText()
+          + getResetPasswordSuccessSendAlert()
+          + getUserNameText()
+          + isChangePasswordAndAccountDetailsErrorsDisplay()
+          + isRegistrationAndLoginErrorDisplayed()
+          + isUserNameTextDisplayed()
+          + isWelcomeToMyAccountTextDisplay()
+          + logOutFromMyAccountPage()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.OrderPage {
+          + h1Header : WebElement
+          + orderNumber : WebElement
+          + receivedOrderAlert : WebElement
+          - wishListProductName : WebElement
+          + OrderPage()
+          + getOrderNumber()
+          + getWishListProductName()
+          + isOrderAcceptMessageIsDisplay()
+          + isReceivedOrderAlertDisplayed()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      abstract class pl.me.automation.page.PageObject {
+          # wait : WebDriverWait
+          # webDriver : WebDriver
+          + PageObject()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.PaymentPage {
+          - accountLoginButton : WebElement
+          - appliedCouponAlertMessage : WebElement
+          - applyCouponButton : WebElement
+          - billingRegistrationError : WebElement
+          - cardNumberField : WebElement
+          - clickToAddCouponButton : WebElement
+          - couponAmount : WebElement
+          - couponCodeInput : WebElement
+          - error : WebElement
+          - errors : List<WebElement>
+          - formValidationError : WebElement
+          - h3Header : WebElement
+          {static} - log : Logger
+          - loginSubmitButton : WebElement
+          - lostPasswordButton : WebElement
+          - newUPaymentMethodRadioButton : WebElement
+          - password : WebElement
+          - payUPayment : WebElement
+          - payUPaymentMethod : WebElement
+          - payURadioButton : WebElement
+          - paymentAccountUsername : WebElement
+          - paymentAddress : WebElement
+          - paymentCity : WebElement
+          - paymentCountrySelect : WebElement
+          - paymentEmail : WebElement
+          - paymentFormEmailError : WebElement
+          - paymentFormError : WebElement
+          - paymentMethods : List<WebElement>
+          - paymentPassword : WebElement
+          - paymentPhone : WebElement
+          - paymentPostCode : WebElement
+          - paymentRegion : WebElement
+          - paymentSubmitButton : WebElement
+          - paymentUserLastNameInput : WebElement
+          - paymentUserNameInput : WebElement
+          - priceAmount : WebElement
+          - shipToDifferentAddressCheckbox : WebElement
+          - shippingAddress : WebElement
+          - shippingCity : WebElement
+          - shippingCountrySelect : WebElement
+          - shippingFirstName : WebElement
+          - shippingLastName : WebElement
+          - shippingPostcode : WebElement
+          - shippingPrice : WebElement
+          - shippingRate : WebElement
+          - shippingState : WebElement
+          - stipeCardValidityError : WebElement
+          - stipeErrorField : WebElement
+          - stripeCardNumberInput : WebElement
+          - stripePaymentBox : WebElement
+          - sumPrice : WebElement
+          - termsAndConditionsCheckbox : WebElement
+          - termsAndConditionsCheckbox1 : WebElement
+          - unableToProcessOrderAlert : WebElement
+          - unableToProcessOrderAlertField : WebElement
+          - userNameOrEmailField : WebElement
+          + PaymentPage()
+          + acceptTermsAndConditionsCheckbox()
+          + applyCouponCode()
+          + checkIfPayURadioButtonIsSelected()
+          + choosePaymentMethod()
+          + clickLoginButton()
+          + clickLostPasswordButton()
+          + clickNewUPaymentMethodRadioButton()
+          + clickSubmitButton()
+          + deselectShipToDifferentAddressCheckbox()
+          + enterBillingAccountPassword()
+          + enterBillingAccountUsername()
+          + enterBillingUserAddress()
+          + enterBillingUserCity()
+          + enterBillingUserEmail()
+          + enterBillingUserLastName()
+          + enterBillingUserName()
+          + enterBillingUserPhone()
+          + enterBillingUserPostCode()
+          + enterBillingUserRegion()
+          + enterShippingAddress()
+          + enterShippingCity()
+          + enterShippingPostCode()
+          + enterShippingRegion()
+          + enterShippingUserLastName()
+          + enterShippingUserName()
+          + enterUserNameOrEmail()
+          + enterUserPassword()
+          + findElementInFrame()
+          + getErrorLabels()
+          + getErrorText()
+          + getFormValidationErrorText()
+          + getProductCouponAmount()
+          + getProductPriceAmount()
+          + getProductShipping()
+          + getProductSumPrice()
+          + getShippingMethodRate()
+          + getStipeCardValidityErrorText()
+          + getUnableToProcessOrderAlertText()
+          + isAppliedCouponAlertMessageDisplayed()
+          + isPaymentEmptyFormErrorDisplayed()
+          + isPaymentFormErrorDisplayed()
+          + isShipToDifferentAddressCheckboxChecked()
+          + paymentAccept()
+          + selectBillingCountry()
+          + selectShippingCountry()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.PrivacyPolicyPage {
+          - policyText : WebElement
+          - privacyPolicyText : WebElement
+          + PrivacyPolicyPage()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.SearchResultsPage {
+          - h1 : WebElement
+          - searchResultAlert : WebElement
+          - searchResultButton : WebElement
+          - searchResultImage : WebElement
+          - searchResultProduct : WebElement
+          + SearchResultsPage()
+          + clickSearchResultButton()
+          + displayProductPhoto()
+          + isSearchResultsPageDisplayedShowingAlert()
+          + isSearchResultsPageDisplayedShowingProduct()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.ShopPage {
+          ~ priceList : List<String>
+          - activeFilterButton : WebElement
+          - activeFilters : List<WebElement>
+          - activeFiltersButtons : List<WebElement>
+          - addToCardButtons : List<WebElement>
+          - basketButton : WebElement
+          - colourFilterInput : WebElement
+          - dragAndDropSliderButton : WebElement
+          - dragAndDropSliderMaxFilter : WebElement
+          - dragAndDropSliderMaxValue : WebElement
+          - dragAndDropSliderMinFilter : WebElement
+          - dragAndDropSliderMinValue : WebElement
+          - dragAndDropSliderRightHandle : WebElement
+          - filterNames : List<WebElement>
+          - filterPrices : List<WebElement>
+          - filteredProductsNames : List<WebElement>
+          - firstRateSortedProduct : WebElement
+          - h2Header : WebElement
+          - productButton : List<WebElement>
+          - productNames : List<WebElement>
+          - productPrice : List<WebElement>
+          - productPrices : List<WebElement>
+          - products : Map<String, Product>
+          - productsImageList : List<WebElement>
+          - productsInBasket : List<Product>
+          - searchField : WebElement
+          - searchSubmit : WebElement
+          - sizeFilterInput : WebElement
+          - sizeFilterSelect : WebElement
+          - sortingSelect : WebElement
+          - starRating : List<WebElement>
+          - submitButton : WebElement
+          - widgetCardTotalPrice : WebElement
+          - wishListButtons : List<WebElement>
+          + ShopPage()
+          + activeFilterDelete()
+          + activeFiltersDeleteByIndex()
+          + activeFiltersDeleteByName()
+          + addProductsToBasket()
+          + addProductsToWishListByIndex()
+          + clickAddToBasketButton()
+          + clickBasket()
+          + clickProduct()
+          + clickToShowSingleProductCard()
+          + dragAndDropPriceFilter()
+          + filterProductsByColour()
+          + filterProductsBySize()
+          + findProduct()
+          + getDragAndDropSliderMaxFilter()
+          + getDragAndDropSliderMaxValue()
+          + getDragAndDropSliderMinFilter()
+          + getDragAndDropSliderMinValue()
+          + getFilterLabels()
+          + getFilteredPrices()
+          + getFilteredProductName()
+          + getProductName()
+          + getProductPrice()
+          + getProductPrice()
+          + getProductsInBasket()
+          + getStarRating()
+          + getWidgetTotalPrice()
+          + sortProducts()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.ShoppingCardPage {
+          - appliedCouponAlertMessage : WebElement
+          - applyCouponButton : WebElement
+          - basketTotalPrice : WebElement
+          - couponAmount : WebElement
+          - couponCodeInput : WebElement
+          - couponErrorAlert : WebElement
+          - deliveryRadioButtonsLabels : List<WebElement>
+          - emptyBasketLabel : WebElement
+          - h1Header : WebElement
+          - priceAmount : WebElement
+          - proceedToCheckoutButton : WebElement
+          - productFromBasket : List<WebElement>
+          - productName : WebElement
+          - productUnitPrice : WebElement
+          - products : Map<String, Product>
+          - productsInBasketNames : List<WebElement>
+          - removeProductFromBasket : List<WebElement>
+          - shippingMethods : List<WebElement>
+          - shippingPriceFirstMethod : WebElement
+          - shippingPriceSecondMethod : WebElement
+          - shippingPriceThirdMethod : WebElement
+          - sumPrice : WebElement
+          + ShoppingCardPage()
+          + applyCouponCode()
+          + chooseShippingMethod()
+          + getAppliedCouponFailAlertMessage()
+          + getAppliedCouponSuccessfullyAlertMessage()
+          + getDeliveryType()
+          + getProductCouponAmount()
+          + getProductName()
+          + getProductPrice()
+          + getProductPriceAmount()
+          + getProductShippingFirstMethod()
+          + getProductShippingSecondMethod()
+          + getProductShippingThirdMethod()
+          + getProductSumPrice()
+          + getProductsInBasketNames()
+          + getShoppingCardTotalPrice()
+          + getSummaryPrice()
+          + isDisplayEmptyBasket()
+          + proceedToCheckout()
+          + removeProductsByName()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.SingleProductPage {
+          ~ js : JavascriptExecutor
+          - addCommentSubmitButton : WebElement
+          - addToCardSingleProductButton : WebElement
+          - addedStarRating : WebElement
+          - authorEmail : WebElement
+          - closeButton : WebElement
+          - commentAuthor : WebElement
+          - commentDescription : WebElement
+          - commentTextArea : WebElement
+          - noReviewsText : WebElement
+          - productZoom : WebElement
+          - productbuttonArraw : WebElement
+          - recommendProductButton : WebElement
+          - recommendProductNameText : WebElement
+          - recommendedProductsButtons : List<WebElement>
+          - recommendedProductsNames : List<WebElement>
+          - reviewsButton : WebElement
+          - singeProductImage : WebElement
+          - singleProductName : WebElement
+          - singleProductNameText : WebElement
+          - starRatingList : List<WebElement>
+          - widgetIcon : WebElement
+          + SingleProductPage()
+          + ZoomProductPhoto()
+          + addStarRating()
+          + clickAddToCardSingeProductButton()
+          + clickAlertBoxAccept()
+          + clickCommentSubmitButton()
+          + clickRecommendProductButton()
+          + clickRecommendedProductsButton()
+          + clickReviewsButton()
+          + clickWidget()
+          + enterComment()
+          + enterUserNameAndEmail()
+          + getAddedStarRating()
+          + getAlertBoxText()
+          + getCommentDescription()
+          + getNoReviewsText()
+          + getRecommendProductNameText()
+          + getRecommendedProductsName()
+          + getSingleProductName()
+          + getSingleProductNameText()
+          + isZoomImageDisplayed()
+      }
+    }
+  }
+  
+
+  namespace pl.me.automation {
+    namespace page {
+      class pl.me.automation.page.WishListPage {
+          - addToCardButton : List<WebElement>
+          - header : WebElement
+          - productRemoveButtons : List<WebElement>
+          - productsNames : List<WebElement>
+          - removeAlert : WebElement
+          - wishListProduct : WebElement
+          - wishListRemoveProducts : Map<String, WebElement>
+          + WishListPage()
+          + addProductFromWishListToCard()
+          + getProductName()
+          + getWishListProductName()
+          + isRemoveAlertDisplay()
+          + removeProductsByName()
+      }
+    }
+  }
+  
+
+  pl.me.automation.page.AboutPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.ChangePasswordPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.ContactPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.EditBillingAddressPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.EditShippingAddressPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.HomePage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.LoggedInUserPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.LostPasswordReminderPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.Menu -up-|> pl.me.automation.page.PageObject
+  pl.me.automation.page.MyAccountPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.OrderPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.PaymentPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.PrivacyPolicyPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.SearchResultsPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.ShopPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.ShoppingCardPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.SingleProductPage -up-|> pl.me.automation.page.Menu
+  pl.me.automation.page.WishListPage -up-|> pl.me.automation.page.Menu
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

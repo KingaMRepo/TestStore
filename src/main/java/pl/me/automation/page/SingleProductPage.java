@@ -58,6 +58,8 @@ public class SingleProductPage<webDriver> extends Menu {
     private List<WebElement> recommendedProductsNames;
 
 
+
+
     JavascriptExecutor js = (JavascriptExecutor) webDriver;
 
 
@@ -107,6 +109,7 @@ public class SingleProductPage<webDriver> extends Menu {
     }
 
     public SingleProductPage addStarRating(String starRatingNumber) {
+
         for (int i = 0; i < starRatingList.size(); i++) {
             if (starRatingList.get(i).getAttribute("class").equals(starRatingNumber)) {
                 starRatingList.get(i).click();
@@ -131,6 +134,7 @@ public class SingleProductPage<webDriver> extends Menu {
     public void clickCommentSubmitButton() {
         addCommentSubmitButton.click();
     }
+
 
     public String getCommentDescription() {
         return commentDescription.getText();
@@ -174,7 +178,6 @@ public class SingleProductPage<webDriver> extends Menu {
             recommendedProductsNames.get(i).getText();
         }
         return addedRecommendedProductsNames;
-
 
     }
 

@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SingleProductPageTest {
+public class SingleProductPageTest extends Forms {
 
     private WebDriver webDriver;
     private HomePage homePage;
@@ -38,69 +38,53 @@ public class SingleProductPageTest {
     @Test
     public void shouldSuccessfulAddCommentAndRating() {
         ShopPage shopPage = homePage.clickShop();
-        SingleProductPage singleProductPage = shopPage.clickProduct(0);
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickReviewsButton();
-        singleProductPage.addStarRating("star-2");
-        singleProductPage.enterComment("Readymade hexagon fingerstache cornhole waistcoat.");
-        singleProductPage.enterUserNameAndEmail("ann", "ann@gmail.com");
+        singleProductPage.addStarRating(singleProduct.getSingleProductPageAddStarRating());
+        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment());
+        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
-        assertThat(singleProductPage.getAddedStarRating().contains("Oceniony 2 na 5."));
-        assertThat(singleProductPage.getCommentDescription().contains("Readymade hexagon fingerstache cornhole waistcoat."));
+        assertThat(singleProductPage.getAddedStarRating().contains(singleProduct.getSingleProductPageGetAddedStarRating()));
+        assertThat(singleProductPage.getCommentDescription().contains(singleProduct.getSingleProductPageEnterComment()));
 
     }
 
     @Test
     public void shouldAddCommentWithoutRating() {
         ShopPage shopPage = homePage.clickShop();
-        SingleProductPage singleProductPage = shopPage.clickProduct(0);
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct()));
         singleProductPage.clickReviewsButton();
-        singleProductPage.enterComment("Readymade hexagon fingerstache cornhole waistcoat.");
-        singleProductPage.enterUserNameAndEmail("ann", "ann@gmail.com");
+        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment());
+        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
-        assertThat(singleProductPage.getAlertBoxText().contains("Proszę wybrać ocenę"));
+        assertThat(singleProductPage.getAlertBoxText().contains(singleProduct.getSingleProductPageGetAlertBoxText()));
     }
 
     @Test
     public void shouldAddRatingWithoutComment() {
         ShopPage shopPage = homePage.clickShop();
-        SingleProductPage singleProductPage = shopPage.clickProduct(0);
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickReviewsButton();
-        singleProductPage.addStarRating("star-1");
-        singleProductPage.enterUserNameAndEmail("ann", "ann@gmail.com");
+        singleProductPage.addStarRating(singleProduct.getSingleProductPageAddStarRating());
+        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
-        assertThat(singleProductPage.getNoReviewsText().contains("Na razie nie ma opinii o produkcie."));
+        assertThat(singleProductPage.getNoReviewsText().contains(singleProduct.getSingleProductPageGetNoReviewsText()));
     }
 
 
     @Test
     public void shouldSendEmptyCommentForm() {
-        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
-        SingleProductPage singleProductPage = shopPage.clickProduct(2);
+        ShopPage shopPage = homePage.selectShopCategory(home.getHomeSelectShopCategory2());
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct()));
         singleProductPage.clickReviewsButton();
         singleProductPage.clickCommentSubmitButton();
-        assertThat(singleProductPage.getAlertBoxText().contains("Proszę wybrać ocenę"));
-    }
-
-    @Test
-    public void shouldAddManyComments() {
-        LocalDateTime now = LocalDateTime.now();
-        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
-        SingleProductPage singleProductPage = shopPage.clickProduct(1);
-        singleProductPage.clickReviewsButton();
-        singleProductPage.addStarRating("star-2");
-        singleProductPage.enterComment("Readymade fingerstache waistcoat."+now.toString().replaceAll(":", "-"));
-        singleProductPage.enterUserNameAndEmail("ann", "ann@gmail.com");
-        singleProductPage.clickCommentSubmitButton();
-        singleProductPage.enterComment("imsum waistcoat shirt"+now.toString().replaceAll(":", "-"));
-        singleProductPage.enterUserNameAndEmail("ann", "ann@gmail.com");
-        singleProductPage.addStarRating("star-2");
-        singleProductPage.clickCommentSubmitButton();
+        assertThat(singleProductPage.getAlertBoxText().contains(singleProduct.getSingleProductPageGetAlertBoxText()));
     }
 
     @Test
     public void shouldAddProductToCartFromSingleProductCardPage(){
-        ShopPage shopPage = homePage.selectShopCategory("Akcesoria");
-        SingleProductPage singleProductPage = shopPage.clickProduct(3);
+        ShopPage shopPage = homePage.selectShopCategory(home.getHomeSelectShopCategory2());
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickAddToCardSingeProductButton();
         String singleProductName = singleProductPage.getSingleProductName();
         ShoppingCardPage shoppingCardPage = singleProductPage.clickWidget();
@@ -109,18 +93,16 @@ public class SingleProductPageTest {
 
     @Test
     public void shouldAddProductToCartFromRecommendedProductsSection(){
-        ShopPage shopPage = homePage.selectShopCategory("Kobieta");
-        SingleProductPage singleProductPage = shopPage.clickProduct(2);
+        ShopPage shopPage = homePage.selectShopCategory(home.getHomeSelectShopCategory1());
+        SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct()));
         singleProductPage.clickAddToCardSingeProductButton();
-        singleProductPage.clickRecommendedProductsButton(0);
-        singleProductPage.clickRecommendedProductsButton(1);
+        singleProductPage.clickRecommendedProductsButton(Integer.valueOf(singleProduct.getSingleProductPageClickRecommendedProductsButton0()));
+        singleProductPage.clickRecommendedProductsButton(Integer.valueOf(singleProduct.getSingleProductPageClickRecommendedProductsButton1()));
         List recommendedProductsName = singleProductPage.getRecommendedProductsName();
         ShoppingCardPage shoppingCardPage = singleProductPage.clickWidget();
         assertThat(recommendedProductsName.equals(shoppingCardPage.getProductName()));
 
     }
-
-
 
 
 }

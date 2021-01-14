@@ -15,6 +15,9 @@ public class Product {
         this.name = name;
     }
 
+    public Product() {
+    }
+
     public WebElement getButton() {
         return button;
     }
