@@ -14,6 +14,10 @@ public class SingleProduct {
     private final String singleProductPageGetAlertBoxText;
     private final String singleProductPageGetNoReviewsText;
     private final String singleProductPageGetAddedStarRating;
+    private final String singleProductPageEnterReplacement;
+    private final String singleProductPageEnterReplacement2;
+
+
 
     public SingleProduct(Properties properties){
         singleProductPageClickRecommendedProductsButton0 = properties.getProperty("singleProductPage.clickRecommendedProductsButton0");
@@ -25,6 +29,9 @@ public class SingleProduct {
         singleProductPageGetAlertBoxText = properties.getProperty("singleProductPage.getAlertBoxText");
         singleProductPageGetNoReviewsText = properties.getProperty("singleProductPage.getNoReviewsText");
         singleProductPageGetAddedStarRating = properties.getProperty("singleProductPage.getAddedStarRating");
+        singleProductPageEnterReplacement = properties.getProperty("singleProductPage.enterReplacement1");
+        singleProductPageEnterReplacement2 = properties.getProperty("singleProductPage.enterReplacement2");
+
     }
 
     public String getSingleProductPageClickRecommendedProductsButton1() {
@@ -62,6 +69,14 @@ public class SingleProduct {
 
     public String getSingleProductPageGetAddedStarRating() {
         return singleProductPageGetAddedStarRating;
+    }
+
+    public String getSingleProductPageEnterReplacement() {
+        return singleProductPageEnterReplacement;
+    }
+
+    public String getSingleProductPageEnterReplacement2() {
+        return singleProductPageEnterReplacement2;
     }
 
 }

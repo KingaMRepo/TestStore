@@ -29,7 +29,7 @@ public class HomePageTest extends TestDataReader {
 
     @AfterEach
     public void destroy() {
-        //webDriver.quit();
+        webDriver.quit();
     }
 
 

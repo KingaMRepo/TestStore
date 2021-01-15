@@ -32,16 +32,17 @@ public class SingleProductPageTest extends Forms {
 
     @AfterEach
     public void destroy() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test
     public void shouldSuccessfulAddCommentAndRating() {
+        LocalDateTime now = LocalDateTime.now();
         ShopPage shopPage = homePage.clickShop();
         SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickReviewsButton();
         singleProductPage.addStarRating(singleProduct.getSingleProductPageAddStarRating());
-        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment());
+        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()));
         singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
         assertThat(singleProductPage.getAddedStarRating().contains(singleProduct.getSingleProductPageGetAddedStarRating()));
@@ -51,10 +52,11 @@ public class SingleProductPageTest extends Forms {
 
     @Test
     public void shouldAddCommentWithoutRating() {
+        LocalDateTime now = LocalDateTime.now();
         ShopPage shopPage = homePage.clickShop();
         SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct()));
         singleProductPage.clickReviewsButton();
-        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment());
+        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()));
         singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
         assertThat(singleProductPage.getAlertBoxText().contains(singleProduct.getSingleProductPageGetAlertBoxText()));

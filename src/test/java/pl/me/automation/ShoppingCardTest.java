@@ -29,7 +29,7 @@ public class ShoppingCardTest extends Forms {
 
     @AfterEach
     public void destroy() {
-        //webDriver.close();
+        webDriver.close();
     }
 
 

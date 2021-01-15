@@ -225,21 +225,6 @@ public class PaymentPageTest extends Forms {
 
 
     @Test
-    public void shouldSelectStripeAsPaymentMethodWithIncorrectCardDate() {
-        ShopPage shopPage = homePage.clickShop();
-        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
-        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
-        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        logInOnPaymentPageAsRegisteredUser(paymentPage);
-        paymentPage.choosePaymentMethod(payment.getPaymentPageChoosePaymentMethodStripe());
-        paymentPage.clickNewUPaymentMethodRadioButton();
-        paymentPage.findElementInFrame(payment.getPaymentPageExpiredCardDetailsCardNumber(), payment.getPaymentPageExpiredCardDetailsCardDate(), payment.getPaymentPageCorrectCardDetailsCardCVC());
-        paymentPage.acceptTermsAndConditionsCheckbox();
-        paymentPage.paymentAccept();
-        assertThat(paymentPage.getStripeCardValidityErrorText().contains(payment.getPaymentPageGetStripeCardValidityErrorText()));
-    }
-
-    @Test
     public void shouldSelectStripeAsPaymentMethodWithIncorrectCVC() {
         ShopPage shopPage = homePage.clickShop();
         shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());

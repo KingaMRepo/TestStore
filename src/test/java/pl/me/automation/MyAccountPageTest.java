@@ -1,5 +1,6 @@
 package pl.me.automation;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -33,7 +34,7 @@ public class MyAccountPageTest extends Forms {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.enterRegisterUserName(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-"));
-        myAccountPage.enterRegisterUserEmail(myAccount.getMyAccountPageEnterRegisterUser()+ now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail());
+        myAccountPage.enterRegisterUserEmail(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail());
         myAccountPage.enterRegisterUserPassword(myAccount.getMyAccountPageEnterRegisterUserPassword());
         myAccountPage.clickRegister();
         assertTrue(myAccountPage.isWelcomeToMyAccountTextDisplay());
@@ -44,7 +45,7 @@ public class MyAccountPageTest extends Forms {
     public void shouldRegisterUserWithEmptyEmail() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.enterRegisterUserName(myAccount.getMyAccountPageEnterRegisterUser()+ now.toString().replaceAll(":", "-"));
+        myAccountPage.enterRegisterUserName(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-"));
         myAccountPage.enterRegisterUserEmail(myAccount.getMyAccountPageEnterEmptyField());
         myAccountPage.enterRegisterUserPassword(myAccount.getMyAccountPageEnterRegisterUserPassword());
         myAccountPage.clickRegisterFalse();
@@ -57,7 +58,7 @@ public class MyAccountPageTest extends Forms {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.enterRegisterUserName(myAccount.getMyAccountPageEnterEmptyField());
-        myAccountPage.enterRegisterUserEmail(myAccount.getMyAccountPageEnterRegisterUser()+ now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail());
+        myAccountPage.enterRegisterUserEmail(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail());
         myAccountPage.enterRegisterUserPassword(myAccount.getMyAccountPageEnterRegisterUserPassword());
         myAccountPage.clickRegisterFalse();
         assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals(myAccount.getMyAccountPageGetRegistrationAndLoginUserErrorText()));
@@ -219,7 +220,7 @@ public class MyAccountPageTest extends Forms {
         editAddressPage.clearBillingPostCode();
         editAddressPage.clearBillingPhoneNumber();
         editAddressPage.clickBillingSubmitButton();
-        assertThat(editAddressPage.getErrorsLabels()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
+        assertThat(editAddressPage.getErrorsLabels()).containsExactly(myAccount.getMyAccountPageGetBillingErrorLabels());
     }
 
     @Test
@@ -258,8 +259,7 @@ public class MyAccountPageTest extends Forms {
         editShippingAddress.clearShippingPostcode();
         editShippingAddress.clearShippingCity();
         editShippingAddress.clickShippingSubmitButton();
-        assertThat(editShippingAddress.getErrorLabels()).contains(myAccount.getMyAccountPageGetErrorLabels());
-
+        assertThat(editShippingAddress.getErrorLabels()).contains(myAccount.getMyAccountPageGetShippingErrorLabels());
     }
 
     @Test
@@ -310,8 +310,6 @@ public class MyAccountPageTest extends Forms {
         assertThat(changePasswordPage.getErrorLabels()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
 
     }
-
-
 
 }
 

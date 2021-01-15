@@ -35,6 +35,8 @@ public class MyAccount {
     private final String editAddressPageEnterBillingPhoneNumber;
     private final String editAddressPageEnterIncorrectBillingPhoneNumber;
     private final String editShippingAddressEnterShippingPostalCode;
+    private final String[] myAccountPageGetShippingErrorLabels;
+    private final String[] myAccountPageGetBillingErrorLabels;
 
 
 
@@ -54,7 +56,6 @@ public class MyAccount {
         changePasswordPageEnterAccountEmail = properties.getProperty("changePasswordPage.enterAccountEmail");
         myAccountPageGetErrorLabels = properties.getProperty("myAccountPage.getErrorLabels").split(",");
         editShippingAddressGetShippingAddressFormAlert = properties.getProperty("editShippingAddress.getShippingAddressFormAlert");
-
         editAddressPageEnterBillingUserName = properties.getProperty("editAddressPage.enterBillingUserName");
         editAddressPageEnterBillingUserLastName = properties.getProperty("editAddressPage.enterBillingUserLastName");
         editAddressPageSelectBillingCountryName = properties.getProperty("editAddressPage.selectBillingCountryName");
@@ -64,7 +65,6 @@ public class MyAccount {
         editAddressPageEnterBillingRegion = properties.getProperty("editAddressPage.enterBillingRegion");
         editAddressPageEnterBillingPhoneNumber = properties.getProperty("editAddressPage.enterBillingPhoneNumber");
         editAddressPageEnterIncorrectBillingPhoneNumber = properties.getProperty("editAddressPage.enterIncorrectBillingPhoneNumber");
-
         editShippingAddressEnterShippingPostalCode = properties.getProperty("editShippingAddress.enterShippingPostalCode");
         myAccountPageEnterLoginUserNameOrEmail1 = properties.getProperty("myAccountPage.enterLoginUserNameOrEmail1");
         myAccountPageEnterLoginUserLoginPassword1 = properties.getProperty("myAccountPage.enterLoginUserLoginPassword1");
@@ -72,6 +72,9 @@ public class MyAccount {
         myAccountPageFillLoginAsUserFormEnterPassword = properties.getProperty("myAccountPage.FillLoginAsUserFormEnterPassword");
         myAccountPageRememberMeCheckboxEnterEmail = properties.getProperty("myAccountPage.RememberMeCheckboxEnterEmail");
         myAccountPageRememberMeCheckboxEnterPassword = properties.getProperty("myAccountPage.RememberMeCheckboxEnterPassword");
+        myAccountPageGetShippingErrorLabels = properties.getProperty("myAccountPage.getShippingErrorLabels").split(",");;
+        myAccountPageGetBillingErrorLabels = properties.getProperty("myAccountPage.getBillingErrorLabels").split(",");;
+
 
     }
 
@@ -202,5 +205,13 @@ public class MyAccount {
         return editShippingAddressEnterShippingPostalCode;
     }
 
+
+    public String[] getMyAccountPageGetShippingErrorLabels() {
+        return myAccountPageGetShippingErrorLabels;
+    }
+
+    public String[] getMyAccountPageGetBillingErrorLabels() {
+        return myAccountPageGetBillingErrorLabels;
+    }
 
 }

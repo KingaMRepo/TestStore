@@ -33,7 +33,7 @@ public class ChangePasswordPage extends Menu {
     private WebElement alert;
     @FindBy(css="div.elementor-widget-container>div>p")
     private WebElement myAccountWelcomeAlert;
-    @FindBy(css=".woocommerce-error>li")
+    @FindBy(css=".woocommerce-error>li>strong")
     private List<WebElement> errors;
     @FindBy(css="div.woocommerce-message")
     private WebElement accountDetailsChangedAlert;

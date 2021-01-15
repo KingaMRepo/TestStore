@@ -27,10 +27,10 @@ public class ContactPageTest extends TestDataReader {
         homePage.clickCookie();
     }
 
- //   @AfterEach
-//    public void destroy() {
-//        webDriver.close();
-//    }
+    @AfterEach
+    public void destroy() {
+        webDriver.close();
+    }
 
     @Test
     public void shouldFillInAndSendForm() {
