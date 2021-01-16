@@ -24,10 +24,10 @@ public class MyAccountPageTest extends Forms {
         homePage.clickCookie();
     }
 
-//   @AfterEach
-//    public void destroy() {
-//        webDriver.close();
-//    }
+   @AfterEach
+    public void destroy() {
+        webDriver.close();
+    }
 
     @Test
     public void shouldCorrectlyRegisterUser() {
@@ -203,7 +203,7 @@ public class MyAccountPageTest extends Forms {
         EditBillingAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         changeIncorrectlyBillingAddress(editAddressPage);
         editAddressPage.clickBillingSubmitButton();
-        assertThat(editAddressPage.getErrorsLabels()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
+        assertThat(editAddressPage.getErrorsLabelsStrong()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
     }
 
     @Test

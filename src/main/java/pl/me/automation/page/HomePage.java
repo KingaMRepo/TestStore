@@ -35,8 +35,6 @@ public class HomePage extends Menu {
     private WebElement cookieNotice;
     @FindBy(id = "cn-accept-cookie")
     private WebElement cookieAcceptButton;
-    @FindBy(id = "cn-refuse-cookie")
-    private WebElement cookieRefuseButton;
     @FindBy(id = "cn-more-info")
     private WebElement cookiePrivacyPolicyButton;
     @FindBy(className = "cookie-notice-container")
@@ -77,15 +75,6 @@ public class HomePage extends Menu {
     public Boolean isWishListPopupMessageDisplayed() {
         wait.until(ExpectedConditions.visibilityOf(wishListPopupMessage));
         return wishListPopupMessage.isDisplayed();
-    }
-
-    public void refuseCookie() {
-        cookieRefuseButton.click();
-    }
-
-
-    public Boolean isCookieRefuseButtonDisplayed() {
-        return cookieRefuseButton.isDisplayed();
     }
 
 

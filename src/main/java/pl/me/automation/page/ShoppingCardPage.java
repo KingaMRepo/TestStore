@@ -57,6 +57,8 @@ public class ShoppingCardPage extends Menu {
     private WebElement couponErrorAlert;
     @FindBy(css = "#shipping_method>li>input")
     private List<WebElement> shippingMethods;
+    @FindBy(css="[class~='coupon-ad8pgrad']")
+    private WebElement couponField;
 
 
     private Map<String, Product> products = new HashMap<>();
@@ -131,6 +133,7 @@ public class ShoppingCardPage extends Menu {
     }
 
     public Double getProductCouponAmount() {
+        wait.until(ExpectedConditions.visibilityOf(couponField));
         return Double.valueOf(couponAmount.getText().replace("zł", ""));
     }
 

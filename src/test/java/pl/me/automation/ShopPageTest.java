@@ -101,7 +101,6 @@ public class ShopPageTest extends TestDataReader {
         shopPage.activeFiltersDeleteByName(shop.getShopPageFilterProductsBySize1());
         List<String> filterLabels = shopPage.getFilterLabels();
         assertThat(filterLabels).containsExactly(shop.getShopPageFilterProductsBySize2());
-
     }
 
     @Test

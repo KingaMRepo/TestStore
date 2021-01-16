@@ -53,11 +53,6 @@ public class HomePageTest extends TestDataReader {
         assertThat(homePage.isWishListPopupMessageDisplayed()).isTrue();
     }
 
-    @Test
-    public void shouldRefuseCookie() {
-        homePage.refuseCookie();
-        assertThat(homePage.isCookieRefuseButtonDisplayed()).isFalse();
-    }
 
     @Test
     public void addRecommendedProductToBasket(){

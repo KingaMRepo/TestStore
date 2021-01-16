@@ -40,6 +40,8 @@ public class EditBillingAddressPage extends Menu {
     private WebElement billingState;
     @FindBy(css="div.woocommerce-message")
     private WebElement editBillingAddressAlert;
+    @FindBy(css=".woocommerce-error>li strong")
+    private List<WebElement>errorsStrong;
     @FindBy(css=".woocommerce-error>li")
     private List<WebElement>errors;
     @FindBy(css =".woocommerce-notices-wrapper")
@@ -141,6 +143,14 @@ public class EditBillingAddressPage extends Menu {
         List<String>labels = new ArrayList<>();
         for (int i = 0; i <errors.size(); i++) {
             labels.add(errors.get(i).getText());
+        }
+        return labels;
+    }
+
+    public List<String> getErrorsLabelsStrong(){
+        List<String>labels = new ArrayList<>();
+        for (int i = 0; i <errorsStrong.size(); i++) {
+            labels.add(errorsStrong.get(i).getText());
         }
         return labels;
     }
