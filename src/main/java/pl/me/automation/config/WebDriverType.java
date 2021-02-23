@@ -15,7 +15,6 @@ public enum WebDriverType {
             chromeOptions.addArguments("--start-maximized");
             return new ChromeDriver(chromeOptions);
         }
-
     };
 
     public abstract WebDriver create();

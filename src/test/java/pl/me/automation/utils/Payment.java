@@ -19,6 +19,7 @@ public class Payment {
     private final String paymentPageEnterBillingAccountUsername;
     private final String paymentPageEnterBillingAccountPassword;
     private final String paymentPageSelectBillingCountry;
+    private final String paymentPageSelectBillingCountryOtherThanPL;
     private final String paymentPageGetFormValidationErrorText;
     private final String paymentPageEnterUserNameOrEmail;
     private final String paymentPageEnterUserPassword;
@@ -66,6 +67,7 @@ public class Payment {
         paymentPageEnterBillingAccountUsername= properties.getProperty("paymentPage.enterBillingAccountUsername");
         paymentPageEnterBillingAccountPassword= properties.getProperty("paymentPage.enterBillingAccountPassword");
         paymentPageSelectBillingCountry = properties.getProperty("paymentPage.selectBillingCountry");
+        paymentPageSelectBillingCountryOtherThanPL = properties.getProperty("paymentPage.selectBillingCountryOtherThanPL");
         paymentPageGetFormValidationErrorText = properties.getProperty("paymentPage.getFormValidationErrorText");
         paymentPageEnterUserNameOrEmail= properties.getProperty("paymentPage.enterUserNameOrEmail");
         paymentPageEnterUserPassword = properties.getProperty("paymentPage.enterUserPassword");
@@ -152,6 +154,10 @@ public class Payment {
 
     public Integer getPaymentPageSelectBillingCountry() {
         return Integer.valueOf(paymentPageSelectBillingCountry);
+    }
+
+    public Integer getPaymentPageSelectBillingCountryOtherThanPL() {
+        return Integer.valueOf(paymentPageSelectBillingCountryOtherThanPL);
     }
 
     public String getPaymentPageGetFormValidationErrorText() {

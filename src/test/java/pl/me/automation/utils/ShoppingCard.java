@@ -20,6 +20,7 @@ public class ShoppingCard {
 
 
     public ShoppingCard(Properties properties){
+
         shoppingCardPageGetDeliveryType = properties.getProperty("shoppingCardPage.getDeliveryType");
         shoppingCardPageGetSummaryPrice = properties.getProperty("shoppingCardPage.getSummaryPrice");
         shoppingCardPageApplyCouponCode = properties.getProperty("shoppingCardPage.applyCouponCode");
@@ -31,8 +32,6 @@ public class ShoppingCard {
         shoppingCardPageReplaceTarget = properties.getProperty("shoppingCardPage.replaceTarget");
         shoppingCardPageReplacement = properties.getProperty("shoppingCardPage.replacement");
         shoppingCardPageZero = properties.getProperty("shoppingCardPage.zero");
-
-
 
     }
 

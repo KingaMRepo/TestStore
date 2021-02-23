@@ -37,6 +37,8 @@ public class MyAccount {
     private final String editShippingAddressEnterShippingPostalCode;
     private final String[] myAccountPageGetShippingErrorLabels;
     private final String[] myAccountPageGetBillingErrorLabels;
+    private final String myAccountPageGetBillingFormErrorLabels;
+
 
 
 
@@ -73,7 +75,8 @@ public class MyAccount {
         myAccountPageRememberMeCheckboxEnterEmail = properties.getProperty("myAccountPage.RememberMeCheckboxEnterEmail");
         myAccountPageRememberMeCheckboxEnterPassword = properties.getProperty("myAccountPage.RememberMeCheckboxEnterPassword");
         myAccountPageGetShippingErrorLabels = properties.getProperty("myAccountPage.getShippingErrorLabels").split(",");;
-        myAccountPageGetBillingErrorLabels = properties.getProperty("myAccountPage.getBillingErrorLabels").split(",");;
+        myAccountPageGetBillingErrorLabels = properties.getProperty("myAccountPage.getBillingErrorLabels").split(",");
+        myAccountPageGetBillingFormErrorLabels = properties.getProperty("myAccountPage.getBillingFormErrorLabels");
 
 
     }
@@ -212,6 +215,10 @@ public class MyAccount {
 
     public String[] getMyAccountPageGetBillingErrorLabels() {
         return myAccountPageGetBillingErrorLabels;
+    }
+
+    public String getMyAccountPageGetBillingFormErrorLabels() {
+        return myAccountPageGetBillingFormErrorLabels;
     }
 
 }

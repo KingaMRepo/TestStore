@@ -3,18 +3,18 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="24.0" y="0.0">pl.me.automation.page.PageObject</node>
+    <node x="24.0" y="0.0">pl.me.automation.pages.PageObject</node>
     <node x="0.0" y="235.0">pl.me.automation.domain.Product</node>
-    <node x="0.0" y="160.0">pl.me.automation.page.ShoppingCardPage</node>
-    <node x="48.0" y="80.0">pl.me.automation.page.Menu</node>
+    <node x="0.0" y="160.0">pl.me.automation.pages.ShoppingCardPage</node>
+    <node x="48.0" y="80.0">pl.me.automation.pages.Menu</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="pl.me.automation.page.Menu" target="pl.me.automation.page.PageObject">
+    <edge source="pl.me.automation.pages.Menu" target="pl.me.automation.pages.PageObject">
       <point x="0.0" y="-15.0" />
       <point x="0.0" y="15.0" />
     </edge>
-    <edge source="pl.me.automation.page.ShoppingCardPage" target="pl.me.automation.page.Menu">
+    <edge source="pl.me.automation.pages.ShoppingCardPage" target="pl.me.automation.pages.Menu">
       <point x="0.0" y="-15.0" />
       <point x="0.0" y="15.0" />
     </edge>

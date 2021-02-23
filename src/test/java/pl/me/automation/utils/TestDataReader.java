@@ -1,14 +1,12 @@
 package pl.me.automation.utils;
 
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
-public class TestDataReader {
+public class TestDataReader  {
 
     private final String testDataLocation = "TestData.properties";
     private Properties properties;
@@ -27,7 +25,6 @@ public class TestDataReader {
         loadFile();
         loadData();
     }
-
 
     private void loadFile() {
         properties = new Properties();
