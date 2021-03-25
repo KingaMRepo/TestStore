@@ -1,11 +1,8 @@
 package pl.me.automation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.WebDriver;
-import pl.me.automation.config.WebDriverType;
 import pl.me.automation.domain.Product;
 import pl.me.automation.pages.*;
 
@@ -16,11 +13,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ShoppingCardTest extends BaseTest{
+public class ShoppingCardPageTest extends BaseTest{
 
 
     @Test

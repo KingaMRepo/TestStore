@@ -128,6 +128,10 @@ public class PaymentPage extends Menu {
     private WebElement billingError;
     @FindBy(css= ".woocommerce-error li:first-child")
     private WebElement billingNameError;
+    @FindBy(id = "user_login")
+    private WebElement lostPasswordUserLogin;
+    @FindBy(css = "[name='wc_reset_password']+button")
+    private WebElement resetPasswordSubmitButton;
 
 
     public PaymentPage(WebDriver driver) {
@@ -263,11 +267,16 @@ public class PaymentPage extends Menu {
         return formValidationError.getText();
     }
 
-    public MyAccountPage clickLostPasswordButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(lostPasswordButton));
+    public MyAccountPage fillInLostPasswordRecoveryForm(String user) {
+        accountLoginButton.click();
+        wait.until(ExpectedConditions.visibilityOf(userNameOrEmailField));
         lostPasswordButton.click();
+        lostPasswordUserLogin.clear();
+        lostPasswordUserLogin.sendKeys(user);
+        resetPasswordSubmitButton.click();
         return new MyAccountPage(webDriver);
     }
+
 
     public PaymentPage choosePaymentMethod(String paymentMethod) {
         Actions actions = new Actions(webDriver);

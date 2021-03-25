@@ -83,7 +83,7 @@ public class HomePage extends Menu {
         productsInBasket.add(products.get(name));
     }
 
-    public List<Product> getProductsInBasket() {
+    public List<Product> getProductsInCard() {
         return productsInBasket;
     }
 

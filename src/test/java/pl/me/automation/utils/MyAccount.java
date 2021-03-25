@@ -38,8 +38,7 @@ public class MyAccount {
     private final String[] myAccountPageGetShippingErrorLabels;
     private final String[] myAccountPageGetBillingErrorLabels;
     private final String myAccountPageGetBillingFormErrorLabels;
-
-
+    private final String changePasswordPageText;
 
 
     public MyAccount(Properties properties) {
@@ -77,7 +76,7 @@ public class MyAccount {
         myAccountPageGetShippingErrorLabels = properties.getProperty("myAccountPage.getShippingErrorLabels").split(",");;
         myAccountPageGetBillingErrorLabels = properties.getProperty("myAccountPage.getBillingErrorLabels").split(",");
         myAccountPageGetBillingFormErrorLabels = properties.getProperty("myAccountPage.getBillingFormErrorLabels");
-
+        changePasswordPageText = properties.getProperty("changePasswordPageText");
 
     }
 
@@ -220,5 +219,10 @@ public class MyAccount {
     public String getMyAccountPageGetBillingFormErrorLabels() {
         return myAccountPageGetBillingFormErrorLabels;
     }
+
+    public String getChangePasswordPageText() {
+        return changePasswordPageText;
+    }
+
 
 }

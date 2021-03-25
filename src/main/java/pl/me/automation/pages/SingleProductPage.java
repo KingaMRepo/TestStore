@@ -55,17 +55,12 @@ public class SingleProductPage<webDriver> extends Menu {
     private List<WebElement> recommendedProductsNames;
 
 
-
-
-    JavascriptExecutor js = (JavascriptExecutor) webDriver;
-
-
     public SingleProductPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.visibilityOf(singeProductImage));
     }
 
-    public void ZoomProductPhoto() {
+    public void zoomProductPhoto() {
         productZoom.click();
         wait.until(ExpectedConditions.elementToBeClickable(productbuttonArraw));
         productbuttonArraw.click();
@@ -115,16 +110,14 @@ public class SingleProductPage<webDriver> extends Menu {
         return new SingleProductPage(webDriver);
     }
 
-    public void enterUserNameAndEmail(String name, String email) {
+    public void addComment(String comment, String name, String email) {
+        commentTextArea.clear();
+        commentTextArea.sendKeys(comment);
         commentAuthor.clear();
         commentAuthor.sendKeys(name);
         authorEmail.clear();
         authorEmail.sendKeys(email);
-    }
-
-    public void enterComment(String comment) {
-        commentTextArea.clear();
-        commentTextArea.sendKeys(comment);
+        addCommentSubmitButton.click();
     }
 
 
@@ -143,12 +136,10 @@ public class SingleProductPage<webDriver> extends Menu {
 
     public String getAlertBoxText() {
         String text = webDriver.switchTo().alert().getText();
-
         return text;
     }
 
-
-    public void clickAlertBoxAccept() {
+    public void acceptAlertBox() {
         webDriver.switchTo().alert().accept();
     }
 

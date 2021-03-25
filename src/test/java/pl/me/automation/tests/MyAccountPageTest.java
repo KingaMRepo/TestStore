@@ -1,8 +1,6 @@
 package pl.me.automation.tests;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.WebDriver;
-import pl.me.automation.config.WebDriverType;
 import pl.me.automation.pages.*;
 
 
@@ -32,7 +30,7 @@ public class MyAccountPageTest extends BaseTest {
     public void shouldRegisterUserWithEmptyEmail() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.fillInMyAccountRegistrationFail(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-"),
+        myAccountPage.fillInMyAccountRegistration(myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-"),
         myAccount.getMyAccountPageEnterEmptyField(), myAccount.getMyAccountPageEnterRegisterUserPassword());
         assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals(myAccount.getMyAccountPageGetRegistrationAndLoginErrorEmailText()));
     }
@@ -42,7 +40,7 @@ public class MyAccountPageTest extends BaseTest {
     public void shouldRegisterUserWithEmptyName() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.fillInMyAccountRegistrationFail(myAccount.getMyAccountPageEnterEmptyField(),
+        myAccountPage.fillInMyAccountRegistration(myAccount.getMyAccountPageEnterEmptyField(),
         myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail(),
         myAccount.getMyAccountPageEnterRegisterUserPassword());
         assertThat(myAccountPage.getRegistrationAndLoginErrorText().equals(myAccount.getMyAccountPageGetRegistrationAndLoginUserErrorText()));
@@ -52,7 +50,7 @@ public class MyAccountPageTest extends BaseTest {
     public void shouldRegisterUserWithEmptyPassword() {
         LocalDateTime now = LocalDateTime.now();
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.fillInMyAccountRegistrationFail(
+        myAccountPage.fillInMyAccountRegistration(
         myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-"),
         myAccount.getMyAccountPageEnterRegisterUser() + now.toString().replaceAll(":", "-") + myAccount.getMyAccountPageEnterRegisterUserEmail(),
         myAccount.getMyAccountPageEnterEmptyField());
@@ -73,7 +71,6 @@ public class MyAccountPageTest extends BaseTest {
         myAccount.getMyAccountPageEnterLoginUserLoginPassword1());
         assertThat(myAccountPage.getUserNameText().contains(myAccount.getMyAccountPageGetUserNameText()));
     }
-
 
     @Test
     public void shouldLoginWithIncorrectUserName() {
@@ -130,10 +127,8 @@ public class MyAccountPageTest extends BaseTest {
     @Test
     public void shouldLoginWithLostPasswordReminder() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        LostPasswordReminderPage lostPasswordReminderPage = myAccountPage.clickLostPasswordReminderButton();
-        lostPasswordReminderPage.insertUserLoginOrEmail(myAccount.getChangePasswordPageEnterAccountEmail());
-        lostPasswordReminderPage.clickResetPasswordButton();
-        assertThat(lostPasswordReminderPage.getResetPasswordText()).isEqualTo(lostPasswordReminderPage.resetText);
+        myAccountPage.fillInLostPasswordRecoveryForm(myAccount.getChangePasswordPageEnterAccountEmail());
+        assertThat(myAccountPage.getResetPasswordText()).isEqualTo(myAccount.getChangePasswordPageText());
     }
 
 
@@ -192,7 +187,6 @@ public class MyAccountPageTest extends BaseTest {
         myAccount.getEditAddressPageEnterBillingCity(),
         myAccount.getEditAddressPageEnterBillingRegion(),
         myAccount.getEditAddressPageEnterBillingPhoneNumber());
-        editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.isEditBillingAddressAlertDisplayed()).isTrue();
     }
 
@@ -211,7 +205,6 @@ public class MyAccountPageTest extends BaseTest {
                 myAccount.getEditAddressPageEnterBillingCity(),
                 myAccount.getEditAddressPageEnterBillingRegion(),
                 myAccount.getEditAddressPageEnterBillingPhoneNumber());
-        editAddressPage.clickBillingSubmitButton();
         editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.fillInBillingAddressForm(myAccount.getEditAddressPageEnterBillingUserLastName(),
                 myAccount.getEditAddressPageEnterBillingUserName(),
@@ -221,7 +214,6 @@ public class MyAccountPageTest extends BaseTest {
                 myAccount.getEditAddressPageEnterBillingRegion(),
                 myAccount.getEditAddressPageEnterBillingPostCode(),
                 myAccount.getEditAddressPageEnterIncorrectBillingPhoneNumber());;
-        editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.getErrorsLabelsStrong()).containsExactly(myAccount.getMyAccountPageGetBillingFormErrorLabels());
     }
 
@@ -233,7 +225,6 @@ public class MyAccountPageTest extends BaseTest {
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
         EditBillingAddressPage editAddressPage = myAccountPage.clickEditAddressAndBillingEditButton();
         editAddressPage.clearBillingAddressFormFields();
-        editAddressPage.clickBillingSubmitButton();
         assertThat(editAddressPage.getErrorsLabels()).containsExactly(myAccount.getMyAccountPageGetBillingErrorLabels());
     }
 
@@ -251,7 +242,6 @@ public class MyAccountPageTest extends BaseTest {
         myAccount.getEditAddressPageEnterBillingCity(),
         myAccount.getEditAddressPageEnterBillingRegion(),
         myAccount.getEditAddressPageEnterBillingPostCode());
-        editShippingAddress.clickShippingSubmitButton();
         assertThat(editShippingAddress.getShippingAddressFormAlert().contains(myAccount.getEditShippingAddressGetShippingAddressFormAlert()));
     }
 
@@ -270,7 +260,6 @@ public class MyAccountPageTest extends BaseTest {
                 myAccount.getEditAddressPageEnterBillingCity(),
                 myAccount.getEditAddressPageEnterBillingRegion(),
                 myAccount.getMyAccountPageEnterEmptyField());
-        editShippingAddress.clickShippingSubmitButton();
         assertTrue(editShippingAddress.isShippingAddressFormAlert());
 
     }
@@ -283,7 +272,6 @@ public class MyAccountPageTest extends BaseTest {
         myAccountPage.clickPaymentAndDeliveryAddressesButton();
         EditShippingAddressPage editShippingAddress = myAccountPage.clickEditShippingAddressEditButtonButton();
         editShippingAddress.clearShippingFormFields();
-        editShippingAddress.clickShippingSubmitButton();
         assertThat(editShippingAddress.getErrorLabels()).contains(myAccount.getMyAccountPageGetShippingErrorLabels());
     }
 
@@ -293,8 +281,7 @@ public class MyAccountPageTest extends BaseTest {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.fillInLoginAsUserForm(myAccount.getMyAccountPageEnterRegisterUser(),
                 myAccount.getMyAccountPageEnterRegisterUserPassword());
-        ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
-        changePasswordPage.fillInChangePasswordForm(
+        myAccountPage.fillInChangePasswordForm(
                 myAccount.getMyAccountPageGetUserNameText(),
                 myAccount.getMyAccountPageGetUserNameText(),
                 myAccount.getMyAccountPageGetUserNameText(),
@@ -302,8 +289,7 @@ public class MyAccountPageTest extends BaseTest {
                 myAccount.getMyAccountPageEnterEmptyField(),
                 myAccount.getMyAccountPageEnterEmptyField(),
                 myAccount.getMyAccountPageEnterEmptyField());
-        changePasswordPage.submitPassword();
-        assertTrue(changePasswordPage.isAccountDetailsChangedAlertAlertDisplayed());
+        assertTrue(myAccountPage.isAccountDetailsChangedAlertAlertDisplayed());
 
     }
 
@@ -312,8 +298,7 @@ public class MyAccountPageTest extends BaseTest {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
         myAccountPage.fillInLoginAsUserForm(myAccount.getMyAccountPageEnterLoginUserNameOrEmail1(),
                 myAccount.getMyAccountPageEnterLoginUserLoginPassword1());
-        ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
-        changePasswordPage.fillInChangePasswordForm(
+        myAccountPage.fillInChangePasswordForm(
                 myAccount.getMyAccountPageGetUserNameText(),
                 myAccount.getMyAccountPageGetUserNameText(),
                 myAccount.getMyAccountPageGetUserNameText(),
@@ -321,20 +306,17 @@ public class MyAccountPageTest extends BaseTest {
                 myAccount.getMyAccountPageEnterEmptyField(),
                 myAccount.getMyAccountPageEnterEmptyField(),
                 myAccount.getMyAccountPageEnterEmptyField());
-        changePasswordPage.submitPassword();
-        assertTrue(changePasswordPage.isMyAccountWelcomeTextDisplayed());
+        assertTrue(myAccountPage.isMyAccountWelcomeTextDisplayed());
 
     }
 
     @Test
     public void shouldSendEmptyFillInChangePasswordAndAccountDetailsForm() {
         MyAccountPage myAccountPage = homePage.clickMyAccount();
-        myAccountPage.fillInLoginAsUserForm(myAccount.getMyAccountPageEnterLoginUserNameOrEmail1(),
-                myAccount.getMyAccountPageEnterLoginUserLoginPassword1());
-        ChangePasswordPage changePasswordPage = myAccountPage.clickIntoChangePasswordAndAccountDetailsButton();
-        changePasswordPage.clearChangePasswordFormFields();
-        changePasswordPage.submitPassword();
-        assertThat(changePasswordPage.getErrorLabels()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
+        myAccountPage.fillInLoginAsUserForm(myAccount.getMyAccountPageEnterRegisterUser(),
+                myAccount.getMyAccountPageEnterRegisterUserPassword());
+        myAccountPage.clearChangePasswordFormFields();
+        assertThat(myAccountPage.getErrorLabels()).containsExactly(myAccount.getMyAccountPageGetErrorLabels());
 
     }
 

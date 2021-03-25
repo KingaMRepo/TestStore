@@ -30,30 +30,20 @@ public class EditShippingAddressPage extends Menu {
     private WebElement shippingAddressFormAlert;
     @FindBy(css = "ul.woocommerce-error")
     private WebElement shippingAddressFormErrorAlert;
-    @FindBy(css=".woocommerce-error>li")
-    private List<WebElement>errors;
+    @FindBy(css = ".woocommerce-error>li")
+    private List<WebElement> errors;
     @FindBy(css = ".woocommerce-notices-wrapper>ul")
     private WebElement errorField;
     @FindBy(css = "input#shipping_state")
     private WebElement shippingState;
 
 
-
-    public EditShippingAddressPage(WebDriver driver)
-    {
+    public EditShippingAddressPage(WebDriver driver) {
         super(driver);
         wait.until(ExpectedConditions.textToBePresentInElement(header, "Adres do wysyłki"));
     }
 
-    public void clearShippingFormFields(){
-        shippingFirstName.clear();
-        shippingFirstLastName.clear();
-        shippingAddress1.clear();
-        shippingPostcode.clear();
-        shippingCity.clear();
-        }
-
-    public void fillInShippingAddressForm(String name, String lastName, String countryName, String shippingAddress,String city, String shippingProvince, String postalCode){
+    public MyAccountPage fillInShippingAddressForm(String name, String lastName, String countryName, String shippingAddress, String city, String shippingProvince, String postalCode) {
         shippingFirstName.clear();
         shippingFirstName.sendKeys(name);
         shippingFirstLastName.clear();
@@ -68,13 +58,21 @@ public class EditShippingAddressPage extends Menu {
         shippingState.sendKeys(shippingProvince);
         shippingPostcode.clear();
         shippingPostcode.sendKeys(postalCode);
+        shippingSaveButton.click();
+        return new MyAccountPage(webDriver);
 
     }
 
 
-    public MyAccountPage clickShippingSubmitButton() {
+    public MyAccountPage clearShippingFormFields() {
+        shippingFirstName.clear();
+        shippingFirstLastName.clear();
+        shippingAddress1.clear();
+        shippingPostcode.clear();
+        shippingCity.clear();
         shippingSaveButton.click();
         return new MyAccountPage(webDriver);
+
     }
 
 
@@ -86,10 +84,10 @@ public class EditShippingAddressPage extends Menu {
         return shippingAddressFormErrorAlert.isDisplayed();
     }
 
-    public List<String> getErrorLabels(){
+    public List<String> getErrorLabels() {
         wait.until(ExpectedConditions.visibilityOf(errorField));
-        List<String>labels = new ArrayList<>();
-        for (int i = 0; i <errors.size(); i++) {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < errors.size(); i++) {
             labels.add(errors.get(i).getText());
         }
         return labels;

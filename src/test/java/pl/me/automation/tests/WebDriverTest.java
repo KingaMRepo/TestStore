@@ -16,7 +16,7 @@ public class WebDriverTest {
     public void shouldOpenStoreTestProject(WebDriverType webDriverType){
         WebDriver webDriver = webDriverType.create();
         webDriver.get("https://www.storetestproject.hekko24.pl/");
-        HomePage homePage = new HomePage(webDriver);
+        new HomePage(webDriver);
         webDriver.quit();
     }
 

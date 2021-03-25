@@ -1,12 +1,7 @@
 package pl.me.automation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.WebDriver;
-import pl.me.automation.config.WebDriverType;
-import pl.me.automation.pages.HomePage;
 import pl.me.automation.pages.ShopPage;
 import pl.me.automation.pages.ShoppingCardPage;
 import pl.me.automation.pages.SingleProductPage;
@@ -16,8 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,9 +25,8 @@ public class SingleProductPageTest extends BaseTest{
         SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickReviewsButton();
         singleProductPage.addStarRating(singleProduct.getSingleProductPageAddStarRating());
-        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()));
-        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
-        singleProductPage.clickCommentSubmitButton();
+        singleProductPage.addComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()),
+        singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         assertThat(singleProductPage.getAddedStarRating().contains(singleProduct.getSingleProductPageGetAddedStarRating()));
         assertThat(singleProductPage.getCommentDescription().contains(singleProduct.getSingleProductPageEnterComment()));
 
@@ -45,10 +38,10 @@ public class SingleProductPageTest extends BaseTest{
         ShopPage shopPage = homePage.clickShop();
         SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct()));
         singleProductPage.clickReviewsButton();
-        singleProductPage.enterComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()));
-        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
-        singleProductPage.clickCommentSubmitButton();
+        singleProductPage.addComment(singleProduct.getSingleProductPageEnterComment()+ now.toString().replaceAll(singleProduct.getSingleProductPageEnterReplacement(), singleProduct.getSingleProductPageEnterReplacement2()),
+                singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         assertThat(singleProductPage.getAlertBoxText().contains(singleProduct.getSingleProductPageGetAlertBoxText()));
+        singleProductPage.acceptAlertBox();
     }
 
     @Test
@@ -57,7 +50,6 @@ public class SingleProductPageTest extends BaseTest{
         SingleProductPage singleProductPage = shopPage.clickProduct(Integer.valueOf(shop.getShopPageClickProduct3()));
         singleProductPage.clickReviewsButton();
         singleProductPage.addStarRating(singleProduct.getSingleProductPageAddStarRating());
-        singleProductPage.enterUserNameAndEmail(singleProduct.getSingleProductPageEnterUserName(), singleProduct.getSingleProductPageEnterUserEmail());
         singleProductPage.clickCommentSubmitButton();
         assertThat(singleProductPage.getNoReviewsText().contains(singleProduct.getSingleProductPageGetNoReviewsText()));
     }

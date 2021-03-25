@@ -2,8 +2,6 @@ package pl.me.automation.tests;
 
 import org.junit.jupiter.api.*;
 import pl.me.automation.pages.ContactPage;
-import pl.me.automation.tests.BaseTest;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.*;
 
@@ -12,7 +10,6 @@ public class ContactPageTest extends BaseTest {
 
     @Test
     public void shouldFillInAndSendForm() {
-        reports.createTest("ContactPageTest - Fill in and send form");
         ContactPage contactPage = homePage.clickContact();
         contactPage.fillInContactForm(contact.getContactPageEnterUserName(),
         contact.getContactPageEnterUserLastName(),
@@ -24,7 +21,6 @@ public class ContactPageTest extends BaseTest {
 
     @Test
     public void shouldSendEmptyForm() {
-        reports.createTest("ContactPageTest - Send empty form");
         ContactPage contactPage = homePage.clickContact();
         contactPage.clickSendMessageButton();
         assertTrue(contactPage.isEmailValidationErrorDisplayed());
@@ -34,7 +30,6 @@ public class ContactPageTest extends BaseTest {
 
     @Test
     public void shouldSendFormWithIncorrectEmail() {
-        reports.createTest("ContactPageTest - Send Form With Incorrect Email");
         ContactPage contactPage = homePage.clickContact();
         contactPage.fillInContactForm(contact.getContactPageEnterUserName(),
         contact.getContactPageEnterUserLastName(),

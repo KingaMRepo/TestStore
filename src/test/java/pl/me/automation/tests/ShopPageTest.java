@@ -3,7 +3,7 @@ package pl.me.automation.tests;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import pl.me.automation.pages.*;
-import pl.me.automation.tests.BaseTest;
+
 import java.util.Comparator;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,11 +44,11 @@ public class ShopPageTest extends BaseTest {
 
 
     @Test
-    public void shouldGoFromSearchResultsToProductCardClickingOnProductSlidePhotoAndClose() {
+    public void shouldGoFromSearchResultsToProductCardClickOnProductSlidePhotoAndClose() {
         ShopPage shopPage = homePage.clickShop();
         SearchResultsPage searchResult = shopPage.findProduct(shop.getShopPageAddProductsToBasket4());
         SingleProductPage photoZoom = searchResult.displayProductPhoto();
-        photoZoom.ZoomProductPhoto();
+        photoZoom.zoomProductPhoto();
         assertTrue(photoZoom.isZoomImageDisplayed());
     }
 

@@ -1,19 +1,12 @@
 package pl.me.automation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.WebDriver;
-import pl.me.automation.config.WebDriverType;
 import pl.me.automation.pages.*;
-import pl.me.automation.utils.TestDataReader;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -61,7 +54,7 @@ public class PaymentPageTest extends BaseTest {
     }
 
     @Test
-    public void shouldRegisterPayWithEmptyForm() {
+    public void shouldRegisterPaymentWithEmptyForm() {
         ShopPage shopPage = homePage.clickShop();
         shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage1 = shopPage.clickBasket();
@@ -73,7 +66,7 @@ public class PaymentPageTest extends BaseTest {
     }
 
     @Test
-    public void shouldIncorrectlyCompletedForm() {
+    public void shouldIncorrectlyCompleteForm() {
         LocalDateTime now = LocalDateTime.now();
         ShopPage shopPage = homePage.clickShop();
         shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
@@ -189,10 +182,7 @@ public class PaymentPageTest extends BaseTest {
         shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
         ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
         PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
-        //paymentPage.clickLoginButton();
-        MyAccountPage myAccountPage = paymentPage.clickLostPasswordButton();
-        myAccountPage.enterLoginOrEmailToLostPasswordUserField(payment.getMyAccountPageEnterLoginOrEmailToLostPasswordUserField());
-        myAccountPage.clickResetPasswordSubmitButton();
+        MyAccountPage myAccountPage = paymentPage.fillInLostPasswordRecoveryForm(payment.getMyAccountPageEnterLoginOrEmailToLostPasswordUserField());
         assertThat(myAccountPage.getResetPasswordSuccessSendAlert()).isEqualTo(payment.getMyAccountPageGetResetPasswordSuccessSendAlert());
     }
 
@@ -255,6 +245,21 @@ public class PaymentPageTest extends BaseTest {
             new PaymentPage(webDriver);
             assertThat(paymentPage.getUnableToProcessOrderAlertText().contains(payment.getPaymentPageGetUnableToProcessOrderAlertText()));
         }
+
+    @Test
+    public void shouldSelectStripeAsPaymentMethodWithIncorrectCardDate() {
+        ShopPage shopPage = homePage.clickShop();
+        shopPage.addProductsToBasket(shop.getShopPageAddProductsToBasket3());
+        ShoppingCardPage shoppingCardPage = shopPage.clickBasket();
+        PaymentPage paymentPage = shoppingCardPage.proceedToCheckout();
+        paymentPage.logInOnPaymentPageAsRegisteredUser(payment.getPaymentPageEnterUserNameOrEmail(), payment.getPaymentPageEnterUserPassword());
+        paymentPage.choosePaymentMethod(payment.getPaymentPageChoosePaymentMethodStripe());
+        paymentPage.clickNewUPaymentMethodRadioButton();
+        paymentPage.findElementInFrame(payment.getPaymentPageExpiredCardDetailsCardNumber(), payment.getPaymentPageExpiredCardDetailsCardDate(), payment.getPaymentPageCorrectCardDetailsCardCVC());
+        paymentPage.acceptTermsAndConditionsCheckbox();
+        paymentPage.paymentAccept();
+        assertThat(paymentPage.getStripeCardValidityErrorText().contains(payment.getPaymentPageGetStripeCardValidityErrorText()));
+    }
 
 
     @Test

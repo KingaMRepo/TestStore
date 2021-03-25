@@ -1,18 +1,15 @@
 package pl.me.automation.tests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.WebDriver;
-import pl.me.automation.config.WebDriverType;
 import pl.me.automation.pages.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class WishListTest extends BaseTest{
+public class WishListPageTest extends BaseTest{
+
 
     @Test
     public void shouldAddProductToWishlistAndValidateSameIsPresentInWishlistWhenLoginAgain() {
@@ -41,6 +38,19 @@ public class WishListTest extends BaseTest{
         assertThat(wishListPage.getWishListProductName()).contains(shop.getShopPageAddProductsToBasket2());
 
     }
+
+    @Test
+    public void shouldAddProductToWishListFromShopPageAsLoggedInUser() {
+        MyAccountPage myAccountPage = homePage.clickMyAccount();
+        myAccountPage.fillInLoginAsUserForm(myAccount.getMyAccountPageEnterRegisterUser(),
+                myAccount.getMyAccountPageEnterRegisterUserPassword());
+        ShopPage shopPage = myAccountPage.clickShop();
+        shopPage.addProductsToWishListByIndex(Integer.valueOf(shop.getShopPageAddProductsToWishListByIndex3()));
+        WishListPage wishListPage = shopPage.clickWistListPage();
+        assertThat(wishListPage.getWishListProductName()).contains(shop.getShopPageAddProductsToBasket2());
+
+    }
+
 
     @Test
     public void shouldAddProductToWishListFromHomePageAsLoggedInUser() {

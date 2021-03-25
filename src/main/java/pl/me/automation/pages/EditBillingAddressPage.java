@@ -56,13 +56,7 @@ public class EditBillingAddressPage extends Menu {
     }
 
 
-
-    public MyAccountPage clickBillingSubmitButton() {
-        submitButton.click();
-        return new MyAccountPage(webDriver);
-    }
-
-    public void fillInBillingAddressForm(String name, String lastName, String CountryName, String billingAddress1, String billingCity, String billingRegion, String billingPostCode, String BillingNumber ) {
+    public MyAccountPage fillInBillingAddressForm(String name, String lastName, String CountryName, String billingAddress1, String billingCity, String billingRegion, String billingPostCode, String BillingNumber ) {
             userNameInput.clear();
             userNameInput.sendKeys(name);
             userLastNameInput.clear();
@@ -79,16 +73,21 @@ public class EditBillingAddressPage extends Menu {
             postCodeInput.sendKeys(billingPostCode);
             phoneNumber.clear();
             phoneNumber.sendKeys(BillingNumber);
+            submitButton.click();
+            return new MyAccountPage(webDriver);
+
         }
 
-    public void clearBillingAddressFormFields() {
+    public MyAccountPage clearBillingAddressFormFields() {
         userNameInput.clear();
         userLastNameInput.clear();
         address1Input.clear();
         cityInput.clear();
-        //billingState.clear();
         postCodeInput.clear();
-        phoneNumber.clear();;
+        phoneNumber.clear();
+        submitButton.click();
+        return new MyAccountPage(webDriver);
+
     }
 
     public String getPaymentAddress(){

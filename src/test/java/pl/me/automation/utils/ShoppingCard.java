@@ -20,7 +20,6 @@ public class ShoppingCard {
 
 
     public ShoppingCard(Properties properties){
-
         shoppingCardPageGetDeliveryType = properties.getProperty("shoppingCardPage.getDeliveryType");
         shoppingCardPageGetSummaryPrice = properties.getProperty("shoppingCardPage.getSummaryPrice");
         shoppingCardPageApplyCouponCode = properties.getProperty("shoppingCardPage.applyCouponCode");
